@@ -10,9 +10,17 @@
 .p-16 {
   padding: 16px;
 }
+.py-0 {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
 .py-16 {
   padding-top: 16px;
   padding-bottom: 16px;
+}
+.px-0 {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
 }
 .px-16 {
   padding-left: 16px;
@@ -51,4 +59,7 @@
 }
 .j-between {
   justify-content: space-between;
+}
+.border-none {
+  border: none !important;
 }

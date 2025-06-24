@@ -1,13 +1,19 @@
 // src/components/Layout.tsx
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import BottomNav from './BottomNav';
 
 export default function Layout() {
+  const location = useLocation();
+
+  const hideBottomNavRoutes = ['/basket'];
+
+  const shouldHideBottomNav = hideBottomNavRoutes.includes(location.pathname);
+
   return (
     <div style={{ height: '100vh' }}>
       {' '}
       <Outlet />
-      <BottomNav />
+      {!shouldHideBottomNav && <BottomNav />}
     </div>
   );
 }
