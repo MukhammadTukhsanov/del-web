@@ -1,8 +1,10 @@
 import { StarFilled } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 export default function HorizontalMenuItem() {
+  const navigate = useNavigate();
   return (
-    <div>
+    <div onClick={() => navigate('/market')}>
       <div
         style={{
           width: 240,

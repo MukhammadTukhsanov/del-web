@@ -108,7 +108,7 @@
 }
 
 .quantity-btn.increase {
-  background-color: #f97316; /* Orange for increase */
+  background-color: var(--color-primary); /* Orange for increase */
   color: white;
 }
 

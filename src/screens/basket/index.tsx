@@ -1,3 +1,4 @@
+import GridMenuItems from '@/components/GridMenuItems';
 import { ArrowLeftOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -78,7 +79,7 @@ export default function Basket({ title = 'Savat', onTrashClick }: TopNavBarProps
           <p className='nav-subtitle m-0'>Bellisimo Pizza · 35-40 min</p>
         </div>
         <button className='nav-icon trash' onClick={onTrashClick} aria-label='Delete'>
-          <DeleteOutlined style={{ fontSize: 20 }} />
+          <DeleteOutlined style={{ fontSize: 20, color: '#ff9556' }} />
         </button>
       </div>
 
@@ -126,6 +127,10 @@ export default function Basket({ title = 'Savat', onTrashClick }: TopNavBarProps
       <div className='separate-title'>
         <h4>Hech narsani unutmadingizmi ?</h4>
       </div>
+
+      <GridMenuItems />
+
+      <div style={{ height: '36px' }}></div>
 
       {/* Enhanced Sticky Bottom Bar */}
       <div className='sticky-bottom-bar'>

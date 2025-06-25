@@ -4,6 +4,7 @@ import './App.css';
 import Layout from './components/Layout.tsx';
 import Basket from './screens/basket/index.tsx';
 import Home from './screens/home/index.tsx';
+import MarketPage from './screens/market-page/index.tsx';
 import Orders from './screens/orders/index.tsx';
 import Profile from './screens/profile/index.tsx';
 
@@ -16,6 +17,7 @@ function App() {
           <Route path='basket' element={<Basket />} />
           <Route path='orders' element={<Orders />} />
           <Route path='profile' element={<Profile />} />
+          <Route path='market' element={<MarketPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

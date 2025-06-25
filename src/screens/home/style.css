@@ -22,33 +22,23 @@
   gap: 8px;
   overflow: hidden; /* important for ellipsis to work */
 }
-
-.header-location i {
-  color: #fff;
-  font-weight: 700;
-  font-size: 24px;
-  flex-shrink: 0; /* don't shrink icon */
+.location {
+  text-align: center;
 }
-
-.header-location div {
-  overflow: hidden;
+.location small {
+  font-size: 10px;
+  font-weight: 600;
+  color: #ffffff90;
+}
+.location-address {
   display: flex;
-  flex-direction: column;
-  flex: 1; /* allow to grow and fill */
-}
-
-.header-location h6 {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin: 0;
+  gap: 8px;
   color: #fff;
-  font-size: 16px;
+  font-size: 12px;
 }
-
-.header-location small {
+.location-address h6 {
   color: #fff;
-  font-size: 14px;
+  font-size: 12px;
 }
 .header button {
   background-color: transparent;
@@ -70,8 +60,35 @@
 }
 .body {
   background-color: #fff;
-  padding: 16px 0;
+  /* padding: 16px 0; */
   margin-top: 16px;
   border-radius: 24px 24px 0 0;
   padding-bottom: 64px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .body {
+    background-color: #0f172a;
+  }
+  p,
+  i,
+  h3,
+  small {
+    color: #fff;
+  }
+  .free-delivery {
+    color: #fff;
+  }
+  .header-menu-item {
+    color: #fff;
+  }
+  .horizontal-menu-title {
+    color: #fff;
+  }
+  .free-delivery {
+    background: #1f293795;
+  }
+  .wrapper {
+    background: #1e293b;
+  }
 }
