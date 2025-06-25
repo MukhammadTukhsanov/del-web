@@ -5,7 +5,14 @@ import BottomNav from './BottomNav';
 export default function Layout() {
   const location = useLocation();
 
-  const hideBottomNavRoutes = ['/basket'];
+  const hideBottomNavRoutes = [
+    '/basket',
+    '/login',
+    '/register',
+    '/sendOTP',
+    '/confirmOTP',
+    '/new-password',
+  ];
 
   const shouldHideBottomNav = hideBottomNavRoutes.includes(location.pathname);
 
