@@ -1,128 +1,58 @@
-import { LockOutlined, PhoneOutlined } from '@ant-design/icons';
-import { Button, Input } from 'antd';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import Button from '@/components/Button/Button';
+import Input from '@/components/Input/Input';
 import { login } from '@/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks';
+import { LockOutlined, PhoneOutlined } from '@ant-design/icons';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import './auth.css';
 
 function Login() {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
   const token = useAppSelector((state) => state.auth.token);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const handleChange =
+    (setter: React.Dispatch<React.SetStateAction<string>>) =>
+    (e: React.ChangeEvent<HTMLInputElement>) =>
+      setter(e.target.value);
+
+  const handleLogin = () => dispatch(login({ email, password }));
+
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '25px',
-        height: '100%',
-        justifyContent: 'center',
-      }}
-    >
-      <h2>
-        {
-          token
-        }
-      </h2>
-      <div
-        style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-      >
-        <img
-          style={{ width: '170px' }}
-          src={require('@/assets/icons/auth/logo-auth.png')}
-          alt='yolda'
-        />
-      </div>
-      <div
-        style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-      >
-        <p className='m-0' style={{ width: '70%', textAlign: 'center', color: '#3C486B70' }}>
-          Iltimos Telefon raqam va Parolingizni kiriting
-        </p>
-      </div>
-      <div
-        style={{
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '0 24px',
-          gap: '25px',
-        }}
-      >
+    <div className='auth-wrapper auth'>
+      {/* <h2>{token}</h2> */}
+      <img className='auth-logo' src={require('@/assets/icons/auth/logo-auth.png')} alt='yolda' />
+      <p className='m-0'>Iltimos Telefon raqam va Parolingizni kiriting</p>
+
+      <Input
+        value={email}
+        onChange={handleChange(setEmail)}
+        prefix={<PhoneOutlined />}
+        placeholder='Telefon raqam'
+      />
+      <div className='auth-password-wrapper'>
         <Input
-          value={email}
-          inputMode={'numeric'}
-          onChange={(e) => setEmail(e.target.value)}
-          style={{ height: '44px', fontSize: '16px' }}
-          prefix={<PhoneOutlined style={{ color: '#3c486b70', fontSize: '16px' }} />}
-          placeholder='Email'
+          value={password}
+          type={'password'}
+          onChange={handleChange(setPassword)}
+          placeholder='Paroll kiriting'
+          prefix={<LockOutlined />}
         />
-        <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-          <Input.Password
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ height: '44px', fontSize: '16px' }}
-            placeholder='Paroll kiriting'
-            prefix={<LockOutlined style={{ color: '#3c486b70', fontSize: '16px' }} />}
-          />
-          <Link
-            to={''}
-            style={{ fontSize: '14px', width: '100%', color: '#3c486b70', textAlign: 'right' }}
-          >
-            Parollni unuttingizmi?
-          </Link>
-        </div>
+        <Link className='forgot-text' to={''}>
+          Parollni unuttingizmi?
+        </Link>
       </div>
-      <div
-        style={{
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '0 24px',
-        }}
-      >
-        <Button
-          style={{
-            backgroundColor: '#ff9556',
-            height: '44px',
-            paddingRight: '36px',
-            paddingLeft: '36px',
-            fontSize: '16px',
-          }}
-          type='primary'
-          onClick={() => {
-            // Dispatch login action here
-            dispatch(login({ email, password }))
-          }}
-        >
-          Kirish
-        </Button>
-      </div>
-      <div
-        style={{
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '0 24px',
-        }}
-      >
-        <span style={{ fontSize: '14px', color: '#3c486b70', textAlign: 'right' }}>
-          Parollni unuttingizmi?{' '}
-          <Link to={''} style={{ color: '#ff9556' }}>
-            Ro'yxatdan o'tish
-          </Link>
-        </span>
-      </div>
+      <Button onClick={handleLogin} title='Kirish' />
+      <span className='auth-footer-text'>
+        Parollni unuttingizmi?{' '}
+        <Link className='auth-link' to={''}>
+          Ro'yxatdan o'tish
+        </Link>
+      </span>
     </div>
   );
 }
