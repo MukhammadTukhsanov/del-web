@@ -2,6 +2,7 @@ import { Input as AntdInput } from 'antd';
 import { cloneElement, isValidElement, ReactNode } from 'react';
 
 type InputProps = {
+  disabled?: boolean;
   type?: 'password' | 'text';
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -19,7 +20,7 @@ type InputProps = {
     | undefined;
 };
 
-const Input = ({ type = 'text', value, onChange, prefix, placeholder, inputMode }: InputProps) => {
+const Input = ({ disabled, type = 'text', value, onChange, prefix, placeholder, inputMode }: InputProps) => {
   const styledPrefix =
     prefix && isValidElement(prefix)
       ? cloneElement(prefix as React.ReactElement<any>, {
@@ -40,6 +41,7 @@ const Input = ({ type = 'text', value, onChange, prefix, placeholder, inputMode 
       style={{ height: '44px', fontSize: '16px' }}
       prefix={styledPrefix}
       placeholder={placeholder}
+      disabled={disabled}
     />
   ) : (
     <AntdInput.Password

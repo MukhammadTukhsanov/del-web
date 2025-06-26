@@ -1,22 +1,38 @@
 // authSlice.js
-import { loginService } from '@/services/auth.services'
+import { otpSendService, verifyOtpService } from '@/services/auth.services'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-export const login = createAsyncThunk(
-  'auth/login',
-  async ({ email, password }: { email: string; password: string }) => {
+export const otpSend = createAsyncThunk(
+  'auth/otpSend',
+  async ({ phone }: { phone: string }) => {
     try {
-      const user = await loginService(email, password)
-      return user;
+      await otpSendService(phone)
+      return {
+        phone
+      }
     } catch (error) {
       throw new Error('Login failed')
     }
   }
 )
 
+export const veirifyOtp = createAsyncThunk(
+  'auth/verifyOtp',
+  async ({ phone, otp }: { phone: string; otp: string }) => {
+    try {
+      const response = await verifyOtpService(phone, otp)
+      return response
+    } catch (error) {
+      throw new Error('OTP confirmation failed')
+    }
+  }
+)
+  
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
+    phone: null as string | null,
     user: null,
     token: null,
     loading: false,
@@ -31,18 +47,31 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(login.pending, (state) => {
+      .addCase(otpSend.pending, (state) => {
         state.loading = true
         state.error = null
       })
-      .addCase(login.fulfilled, (state, action) => {
+      .addCase(otpSend.fulfilled, (state, action) => {
         state.loading = false
-        state.user = action.payload.email
-        state.token = action.payload.token
+        state.phone = action.payload.phone
       })
-      .addCase(login.rejected, (state, action) => {
+      .addCase(otpSend.rejected, (state, action) => {
         state.loading = false
         state.error = 'Login failed'
+      })
+
+      .addCase(veirifyOtp.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(veirifyOtp.fulfilled, (state, action) => {
+        state.loading = false
+        state.token = action.payload.token
+        state.error = null
+      })
+      .addCase(veirifyOtp.rejected, (state, action) => {
+        state.loading = false
+        state.error = 'OTP confirmation failed'
       })
   },
 })

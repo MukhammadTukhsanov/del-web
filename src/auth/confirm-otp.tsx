@@ -1,14 +1,17 @@
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
+import { veirifyOtp } from '@/features/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { PhoneOutlined } from '@ant-design/icons';
 import { Flex, GetProps, Input as InputOTP } from 'antd';
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 type OTPProps = GetProps<typeof InputOTP.OTP>;
 
 function ConfirmOTP() {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const dispatch = useAppDispatch();
+  const phone = useAppSelector((state) => state.auth.phone);
+  const token = useAppSelector((state) => state.auth.token);
 
   const onChange: OTPProps['onChange'] = (text) => {
     console.log('onChange:', text);
@@ -17,6 +20,10 @@ function ConfirmOTP() {
   const onInput: OTPProps['onInput'] = (value) => {
     console.log('onInput:', value);
   };
+
+  if(token) {
+    alert('Siz allaqachon tizimga kirdingiz');
+  }
 
   const sharedProps: OTPProps = {
     onChange,
@@ -30,11 +37,12 @@ function ConfirmOTP() {
         Parolingizni unutdingizmi? Ro'yxatdan o'tilgan telefon raqamni kiriting.
       </p>
       <Input
-        value={phoneNumber}
+        value={phone || ''}
+        onChange={(e) => console.log('Phone input changed:', e.target.value)}
         inputMode={'numeric'}
-        onChange={(e) => setPhoneNumber(e.target.value)}
         prefix={<PhoneOutlined />}
         placeholder='Telefon raqam'
+        disabled
       />
       <Flex gap='middle' align='flex-start' vertical>
         <InputOTP.OTP size={'large'} formatter={(str: any) => str.toUpperCase()} {...sharedProps} />
@@ -45,7 +53,10 @@ function ConfirmOTP() {
           Qayta jo'natish
         </Link>
       </span>
-      <Button onClick={() => {}} title="SMS Jo'natish" />
+      <Button onClick={() => {
+        dispatch(veirifyOtp({ phone: phone || '', otp: '123456' }));
+        
+      }} title="SMS Jo'natish" />
     </div>
   );
 }
