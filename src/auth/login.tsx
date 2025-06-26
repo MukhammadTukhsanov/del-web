@@ -1,11 +1,18 @@
 import { LockOutlined, PhoneOutlined } from '@ant-design/icons';
 import { Button, Input } from 'antd';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { login } from '@/features/auth/authSlice';
+import { IStore } from '@/store';
 
 function Login() {
+  const dispatch = useDispatch()
+  const user = useSelector((state: IStore) => state.auth.user);
+
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
+
   return (
     <div
       style={{
@@ -86,6 +93,10 @@ function Login() {
             fontSize: '16px',
           }}
           type='primary'
+          onClick={() => {
+            // Dispatch login action here
+            dispatch(login({ phoneNumber, password }))
+          }}
         >
           Kirish
         </Button>
