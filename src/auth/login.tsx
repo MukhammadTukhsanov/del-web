@@ -1,46 +1,93 @@
 import Button from '@/components/Button/Button';
-import Input from '@/components/Input/Input';
+import PhoneInput from '@/components/PhoneInput/PhoneInput'; // Updated import
 import { otpSend } from '@/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { PhoneOutlined } from '@ant-design/icons';
-import { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './auth.css';
 
 function Login() {
   const dispatch = useAppDispatch();
   const statePhone = useAppSelector((state) => state.auth.phone);
   const [phone, setPhone] = useState('');
+  const [cleanPhone, setCleanPhone] = useState('');
+  const [isPhoneValid, setIsPhoneValid] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [inputError, setInputError] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
-  const handleChange =
-    (setter: React.Dispatch<React.SetStateAction<string>>) =>
-    (e: React.ChangeEvent<HTMLInputElement>) =>
-      setter(e.target.value);
+  const navigate = useNavigate();
 
-  const handleLogin = () => dispatch(otpSend({ phone }));
+  const handlePhoneChange = (formattedPhone: string, cleanPhoneNumber: string) => {
+    setPhone(formattedPhone);
+    setCleanPhone(cleanPhoneNumber);
+    if (inputError) {
+      setInputError(false);
+    }
+  };
 
-  if(statePhone) {
-    return <Navigate to='/confirmOTP' replace={true} />;
-  }
+  const handlePhoneValidation = (cleanPhoneNumber: string, isValid: boolean) => {
+    setIsPhoneValid(isValid);
+  };
+
+  const handleLogin = async () => {
+    if (!cleanPhone || !isPhoneValid) {
+      setInputError(true);
+      return;
+    }
+
+    setIsLoading(true);
+    setIsAnimating(true);
+
+    try {
+      await dispatch(otpSend({ phone: cleanPhone }));
+
+      const wrapper = document.querySelector('.auth-wrapper');
+      if (wrapper) {
+        wrapper.classList.add('page-exit');
+      }
+
+      setTimeout(() => {
+        setIsAnimating(false);
+      }, 300);
+    } catch (error) {
+      setInputError(true);
+      setIsLoading(false);
+      setIsAnimating(false);
+    }
+  };
+
+  useEffect(() => {
+    if (statePhone && !isAnimating) {
+      navigate('/confirmOTP');
+    }
+  }, [statePhone, navigate, isAnimating]);
 
   return (
     <div className='auth-wrapper auth'>
       <img className='auth-logo' src={require('@/assets/icons/auth/logo-auth.png')} alt='yolda' />
+
       <p className='m-0'>Iltimos Telefon raqam va Parolingizni kiriting</p>
 
-      <Input
-        value={phone}
-        onChange={handleChange(setPhone)}
-        prefix={<PhoneOutlined />}
-        placeholder='Telefon raqam'
+      <div className='auth-input-wrapper'>
+        <PhoneInput
+          value={phone}
+          onChange={handlePhoneChange}
+          onValidChange={handlePhoneValidation}
+          placeholder='Telefon raqam'
+          error={inputError}
+          disabled={isLoading}
+          autoFocus={true}
+          size='large'
+        />
+      </div>
+
+      <Button
+        onClick={handleLogin}
+        title={isLoading ? 'Yuborilmoqda...' : 'Kirish'}
+        className={`auth-button ${isLoading ? 'loading' : ''}`}
+        disabled={isLoading}
       />
-      <Button onClick={handleLogin} title='Kirish' />
-      <span className='auth-footer-text'>
-        Parollni unuttingizmi?{' '}
-        <Link className='auth-link' to={''}>
-          Ro'yxatdan o'tish
-        </Link>
-      </span>
     </div>
   );
 }

@@ -1,0 +1,17 @@
+:where(.css-dev-only-do-not-override-os2fvf).ant-input-outlined:hover
+  :where(.css-dev-only-do-not-override-os2fvf).ant-input-outlined:focus,
+:where(.css-dev-only-do-not-override-os2fvf).ant-input-outlined:focus-within {
+  border-color: rgb(255, 149, 86) !important;
+  box-shadow: 0 0 0 2px rgba(255, 149, 86, 0.2) !important;
+}
+.yolda-input,
+.phone-input {
+  font-size: 16px !important;
+  color: #3c486b;
+}
+:where(.css-dev-only-do-not-override-os2fvf).ant-input-outlined:focus,
+:where(.css-dev-only-do-not-override-os2fvf).ant-input-outlined:focus-within {
+  border-color: rgb(255, 149, 86) !important;
+}
+:where(.css-dev-only-do-not-override-os2fvf).ant-input-outlined:focus-within {
+}

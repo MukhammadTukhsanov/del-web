@@ -4,9 +4,11 @@ interface ButtonProps {
   onClick: () => void;
   style?: React.CSSProperties | undefined;
   title: string;
+  className?: string;
+  disabled?: boolean;
 }
 
-const Button = ({ onClick, style, title }: ButtonProps) => {
+const Button = ({ onClick, style, title, className, disabled }: ButtonProps) => {
   return (
     <AntdButton
       style={{
@@ -15,10 +17,13 @@ const Button = ({ onClick, style, title }: ButtonProps) => {
         paddingRight: '36px',
         paddingLeft: '36px',
         fontSize: '16px',
+        color: disabled ? '#ffffff80' : '#fff',
         ...style,
       }}
       type='primary'
       onClick={onClick}
+      className={className}
+      disabled={disabled}
     >
       {title}
     </AntdButton>

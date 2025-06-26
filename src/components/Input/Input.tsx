@@ -1,5 +1,6 @@
 import { Input as AntdInput } from 'antd';
 import { cloneElement, isValidElement, ReactNode } from 'react';
+import './Input.css';
 
 type InputProps = {
   disabled?: boolean;
@@ -18,9 +19,21 @@ type InputProps = {
     | 'numeric'
     | 'decimal'
     | undefined;
+  className?: string | undefined;
+  onPressEnter?: React.KeyboardEventHandler<HTMLInputElement> | undefined;
 };
 
-const Input = ({ disabled, type = 'text', value, onChange, prefix, placeholder, inputMode }: InputProps) => {
+const Input = ({
+  disabled,
+  type = 'text',
+  value,
+  onChange,
+  prefix,
+  placeholder,
+  inputMode,
+  className,
+  onPressEnter,
+}: InputProps) => {
   const styledPrefix =
     prefix && isValidElement(prefix)
       ? cloneElement(prefix as React.ReactElement<any>, {
@@ -35,13 +48,15 @@ const Input = ({ disabled, type = 'text', value, onChange, prefix, placeholder, 
 
   return type === 'text' ? (
     <AntdInput
+      className={`${className} yolda-input`}
       value={value}
       inputMode={inputMode}
       onChange={onChange}
-      style={{ height: '44px', fontSize: '16px' }}
+      style={{ height: '44px', fontSize: '14px' }}
       prefix={styledPrefix}
       placeholder={placeholder}
       disabled={disabled}
+      onPressEnter={onPressEnter}
     />
   ) : (
     <AntdInput.Password
