@@ -1,16 +1,16 @@
 import { LockOutlined, PhoneOutlined } from '@ant-design/icons';
 import { Button, Input } from 'antd';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { login } from '@/features/auth/authSlice';
-import { IStore } from '@/store';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 
 function Login() {
-  const dispatch = useDispatch()
-  const user = useSelector((state: IStore) => state.auth.user);
+  const dispatch = useAppDispatch()
+  const user = useAppSelector((state) => state.auth.user);
+  const token = useAppSelector((state) => state.auth.token);
 
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   return (
@@ -23,6 +23,11 @@ function Login() {
         justifyContent: 'center',
       }}
     >
+      <h2>
+        {
+          token
+        }
+      </h2>
       <div
         style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
       >
@@ -51,12 +56,12 @@ function Login() {
         }}
       >
         <Input
-          value={phoneNumber}
+          value={email}
           inputMode={'numeric'}
-          onChange={(e) => setPhoneNumber(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           style={{ height: '44px', fontSize: '16px' }}
           prefix={<PhoneOutlined style={{ color: '#3c486b70', fontSize: '16px' }} />}
-          placeholder='Telefon raqam'
+          placeholder='Email'
         />
         <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
           <Input.Password
@@ -95,7 +100,7 @@ function Login() {
           type='primary'
           onClick={() => {
             // Dispatch login action here
-            dispatch(login({ phoneNumber, password }))
+            dispatch(login({ email, password }))
           }}
         >
           Kirish

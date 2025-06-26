@@ -1,15 +1,16 @@
 // authSlice.js
+import { loginService } from '@/services/auth.services'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-// Fake async login (replace with real API call)
 export const login = createAsyncThunk(
   'auth/login',
-  async ({ phoneNumber, password }) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve({ username: 'admin', token: '123456' })
-      }, 1000)
-    })
+  async ({ email, password }: { email: string; password: string }) => {
+    try {
+      const user = await loginService(email, password)
+      return user;
+    } catch (error) {
+      throw new Error('Login failed')
+    }
   }
 )
 
@@ -19,7 +20,7 @@ const authSlice = createSlice({
     user: null,
     token: null,
     loading: false,
-    error: null,
+    error: null as string | null
   },
   reducers: {
     logout(state) {
@@ -36,12 +37,12 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false
-        state.user = action.payload.username
+        state.user = action.payload.email
         state.token = action.payload.token
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false
-        state.error = action.error.message
+        state.error = 'Login failed'
       })
   },
 })
