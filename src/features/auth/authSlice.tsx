@@ -1,5 +1,5 @@
 // authSlice.js
-import { otpSendService, verifyOtpService } from '@/services/auth.services';
+import { getCurrentUserService, otpSendService, refreshTokenService, verifyOtpService } from '@/services/auth.services';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export const otpSend = createAsyncThunk('auth/otpSend', async ({ phone }: { phone: string }) => {
@@ -25,12 +25,31 @@ export const veirifyOtp = createAsyncThunk(
   },
 );
 
+export const refreshToken = createAsyncThunk('auth/refreshToken', async () => {
+  try {
+    const response = await refreshTokenService();
+    return response;
+  } catch (error) {
+    throw new Error('Refresh token failed');
+  }
+});
+
+export const getCurrentUser = createAsyncThunk('auth/getCurrentUser', async () => {
+  try {
+    const response = await getCurrentUserService();
+    return response;
+  } catch (error) {
+    throw new Error('Failed to fetch current user');
+  }
+});
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
     phone: null as string | null,
     user: null,
     token: null,
+    tokenLoading: true,
     loading: false,
     error: null as string | null,
   },
@@ -38,6 +57,7 @@ const authSlice = createSlice({
     logout(state) {
       state.user = null;
       state.token = null;
+      state.tokenLoading = false;
       state.error = null;
       state.phone = null;
     },
@@ -47,6 +67,40 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(refreshToken.pending, (state) => {
+        state.tokenLoading = true;
+        state.error = null;
+      })
+      .addCase(refreshToken.fulfilled, (state, action) => {
+        state.tokenLoading = false;
+        state.token = action.payload.token;
+        localStorage.setItem('auth_token', action.payload.token);
+        state.error = null;
+      })
+      .addCase(refreshToken.rejected, (state, action) => {
+        state.tokenLoading = false;
+        state.token = null;
+        state.user = null;
+        state.error = 'Refresh token failed';
+      })
+
+      .addCase(getCurrentUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getCurrentUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(getCurrentUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = 'Failed to fetch current user';
+        state.user = null;
+        state.token = null;
+        localStorage.removeItem('auth_token');
+      })
+
       .addCase(otpSend.pending, (state) => {
         state.loading = true;
         state.error = null;

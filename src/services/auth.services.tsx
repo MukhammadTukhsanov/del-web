@@ -26,3 +26,24 @@ export async function verifyOtpService(phone: string, otp: string) {
         throw error;
     }
 }
+
+export async function refreshTokenService() {
+    try {
+        const response = await axiosInstance.post('/auth/refresh-token');
+        return response.data;
+    } catch (error) {
+        console.error('Refresh token error:', error);
+        throw error;
+    }
+}
+
+// Get current user
+export async function getCurrentUserService() {
+    try {
+        const response = await axiosInstance.get('/auth/current-user');
+        return response.data;
+    } catch (error) {
+        console.error('Get current user error:', error);
+        throw error;
+    }
+}

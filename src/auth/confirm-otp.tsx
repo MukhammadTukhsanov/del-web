@@ -3,11 +3,9 @@ import PhoneInput from '@/components/PhoneInput/PhoneInput'; // Updated import
 import { clearPhone, otpSend, veirifyOtp } from '@/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { LeftOutlined } from '@ant-design/icons';
-import { Flex, GetProps, Input as InputOTP } from 'antd';
+import { Flex, Input as InputOTP } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-type OTPProps = GetProps<typeof InputOTP.OTP>;
 
 function ConfirmOTP() {
   const dispatch = useAppDispatch();
@@ -65,7 +63,7 @@ function ConfirmOTP() {
     }
   }, []);
 
-  const onChange: OTPProps['onChange'] = (text) => {
+  const onChange = (text: string) => {
     setOtpValue(text);
     if (otpError) {
       setOtpError(false);
@@ -77,8 +75,8 @@ function ConfirmOTP() {
     }
   };
 
-  const onInput: OTPProps['onInput'] = (value) => {
-    console.log('onInput:', value);
+  const onInput = (value: string[]) => {
+    console.log('onInput:', value.join(''));
   };
 
   const handleVerifyOtp = async (otp?: string) => {
@@ -148,7 +146,7 @@ function ConfirmOTP() {
     return navigate('/');
   }
 
-  const sharedProps: OTPProps = {
+  const sharedProps = {
     onChange,
     onInput,
     value: otpValue,

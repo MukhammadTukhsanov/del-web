@@ -8,13 +8,17 @@ import './auth.css';
 
 function Login() {
   const dispatch = useAppDispatch();
-  const statePhone = useAppSelector((state) => state.auth.phone);
+  const statePhone = useAppSelector((state) => state.auth?.phone);
   const [phone, setPhone] = useState('');
   const [cleanPhone, setCleanPhone] = useState('');
   const [isPhoneValid, setIsPhoneValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [inputError, setInputError] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    console.log('>>>')
+  }, []);
 
   const navigate = useNavigate();
 
