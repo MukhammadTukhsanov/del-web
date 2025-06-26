@@ -44,7 +44,7 @@ export default function Home() {
             zIndex: 2,
           }}
         >
-          <div className={'header clipped-header'}>
+          <div className={'header clipped-header'} style={{ backgroundColor: 'transparent' }}>
             <img
               style={{ width: 36, height: 36 }}
               src={require('@/assets/icons/logo.svg')}

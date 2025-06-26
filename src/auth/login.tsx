@@ -67,7 +67,7 @@ function Login() {
     <div className='auth-wrapper auth'>
       <img className='auth-logo' src={require('@/assets/icons/auth/logo-auth.png')} alt='yolda' />
 
-      <p className='m-0'>Iltimos Telefon raqam va Parolingizni kiriting</p>
+      <p className='m-0'>Iltimos telefon raqamingizni kiriting</p>
 
       <div className='auth-input-wrapper'>
         <PhoneInput
