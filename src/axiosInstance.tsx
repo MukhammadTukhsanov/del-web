@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://scrappio.site/api', 
+  baseURL: 'http://localhost:2000/api', 
   timeout: 15000,
 });
 
@@ -11,7 +11,6 @@ axiosInstance.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    console.log('Request:', config);
     return config;
   },
   (error) => Promise.reject(error)

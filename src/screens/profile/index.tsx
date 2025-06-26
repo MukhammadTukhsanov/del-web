@@ -1,16 +1,21 @@
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
-import { logout } from '@/features/auth/authSlice';
-import { useAppDispatch } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { getUserInfo } from '@/services/profile.services';
 import { CloseOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './style.css'; // Import the CSS file
+import { logout } from '@/features/auth/userSlice';
 
 const ProfileScreen = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const user = useAppSelector((state) => state.user.user);
+
+  console.log('user: ', user);
+
   const [userInfo, setUserInfo] = useState({
     name: '',
     phone: '',
@@ -23,29 +28,6 @@ const ProfileScreen = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('uz');
 
   const languages = [{ code: 'uz', name: "O'zbekcha", flag: '🇺🇿' }];
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const user = await getUserInfo();
-        if (user) {
-          console.log('user', user);
-          setUserInfo({
-            name: user.name,
-            phone: user.phone,
-          });
-        }
-      } catch (error) {
-        console.error('Failed to fetch user info', error);
-        // Optionally log out or redirect
-        // dispatch(logout());
-        // localStorage.removeItem('auth_token');
-        // navigate('/login');
-      }
-    };
-
-    fetchUser();
-  }, [dispatch, navigate]);
 
   const menuItems = [
     {
@@ -141,8 +123,8 @@ const ProfileScreen = () => {
               <i className='bi bi-person avatar-icon'></i>
             </div>
             <div className='user-details'>
-              <h2 className='user-name'>{userInfo.name}</h2>
-              <p className='user-phone'>+{formatUzbekPhone(`${userInfo.phone}`)}</p>
+              <h2 className='user-name'>{user?.name}</h2>
+              <p className='user-phone'>+{formatUzbekPhone(`${user?.phone}`)}</p>
             </div>
           </div>
           <button onClick={() => setShowEditModal(true)} className='edit-button'>

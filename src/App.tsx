@@ -1,5 +1,4 @@
-import React, { use, useEffect } from 'react';
-import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import ConfirmOTP from './auth/confirm-otp';
 import Login from './auth/login';
@@ -11,7 +10,8 @@ import MarketPage from './screens/market-page';
 import Orders from './screens/orders';
 import Profile from './screens/profile';
 import { useAppDispatch, useAppSelector } from './hooks';
-import { getCurrentUser, refreshToken } from './features/auth/authSlice';
+import { useEffect } from 'react';
+import { getCurrentUser, logout, refreshToken } from './features/auth/userSlice';
 
 function App() {
   return (
@@ -23,21 +23,39 @@ function App() {
 
 function AppRoutes() {
   const dispatch = useAppDispatch();
-  const tokenLoading = useAppSelector((state) => state.auth.tokenLoading);
-  const token = useAppSelector((state) => state.auth.token);
-  const error = useAppSelector((state) => state.auth.error);
+  const token = useAppSelector((state) => state.user.token);
+  const loading = useAppSelector((state) => state.user.loading);
 
   useEffect(() => {
     dispatch(refreshToken());
   }, [dispatch]);
 
   useEffect(() => {
+    if (!token) return;
+    
     dispatch(getCurrentUser());
   }, [token, dispatch]);
 
-  if(tokenLoading) {
-    return <div className='loading'>Loading...</div>;
+  if (loading) {
+    return <div>Loading...</div>;
   }
+
+  if (!token) {
+    return <div>
+      Auth user page view
+    </div>;
+  }
+
+  return <>
+  User
+  {token}
+  <hr />
+  <button
+    onClick={() => {
+      dispatch(logout());
+    }}
+  >Logout</button>
+  </>
 
   return (
     <Routes>

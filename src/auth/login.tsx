@@ -1,14 +1,14 @@
 import Button from '@/components/Button/Button';
 import PhoneInput from '@/components/PhoneInput/PhoneInput'; // Updated import
-import { otpSend } from '@/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './auth.css';
+import { otpSend } from '@/features/auth/otpSlice';
 
 function Login() {
   const dispatch = useAppDispatch();
-  const statePhone = useAppSelector((state) => state.auth?.phone);
+  const statePhone = useAppSelector((state) => state.otp.phone);
   const [phone, setPhone] = useState('');
   const [cleanPhone, setCleanPhone] = useState('');
   const [isPhoneValid, setIsPhoneValid] = useState(false);

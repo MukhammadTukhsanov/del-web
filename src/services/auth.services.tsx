@@ -37,7 +37,6 @@ export async function refreshTokenService() {
     }
 }
 
-// Get current user
 export async function getCurrentUserService() {
     try {
         const response = await axiosInstance.get('/auth/current-user');

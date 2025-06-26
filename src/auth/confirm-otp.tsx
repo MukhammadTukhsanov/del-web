@@ -1,6 +1,6 @@
 import Button from '@/components/Button/Button';
 import PhoneInput from '@/components/PhoneInput/PhoneInput'; // Updated import
-import { clearPhone, otpSend, veirifyOtp } from '@/features/auth/authSlice';
+import { otpSend, veirifyOtp } from '@/features/auth/otpSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { LeftOutlined } from '@ant-design/icons';
 import { Flex, Input as InputOTP } from 'antd';
@@ -10,8 +10,8 @@ import { Link, useNavigate } from 'react-router-dom';
 function ConfirmOTP() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const phone = useAppSelector((state) => state.auth.phone);
-  const token = useAppSelector((state) => state.auth.token);
+  const phone = useAppSelector((state) => state.otp.phone);
+  const token = useAppSelector((state) => state.otp.token);
 
   const [otpValue, setOtpValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -136,13 +136,11 @@ function ConfirmOTP() {
     }
 
     setTimeout(() => {
-      dispatch(clearPhone());
       navigate(-1);
     }, 300);
   };
 
   if (token && !isAnimating) {
-    localStorage.setItem('auth_token', token);
     return navigate('/');
   }
 
