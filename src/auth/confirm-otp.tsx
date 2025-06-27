@@ -1,17 +1,18 @@
 import Button from '@/components/Button/Button';
-import PhoneInput from '@/components/PhoneInput/PhoneInput'; // Updated import
+import PhoneInput from '@/components/PhoneInput/PhoneInput';
 import { otpSend, veirifyOtp } from '@/features/auth/otpSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { LeftOutlined } from '@ant-design/icons';
 import { Flex, Input as InputOTP } from 'antd';
 import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 function ConfirmOTP() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const loading = useAppSelector((state) => state.otp.loading);
   const phone = useAppSelector((state) => state.otp.phone);
-  const token = useAppSelector((state) => state.otp.token);
+  const userToken = useAppSelector((state) => state.otp.token);
 
   const [otpValue, setOtpValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -22,21 +23,6 @@ function ConfirmOTP() {
 
   const countdownRef = useRef<NodeJS.Timeout>(null);
 
-  // Add page entrance animation
-  useEffect(() => {
-    const wrapper = document.querySelector('.auth-wrapper');
-    if (wrapper) {
-      wrapper.classList.add('page-enter');
-    }
-
-    return () => {
-      if (wrapper) {
-        wrapper.classList.remove('page-enter');
-      }
-    };
-  }, []);
-
-  // Countdown timer for resend
   useEffect(() => {
     if (countdown > 0) {
       countdownRef.current = setTimeout(() => {
@@ -91,23 +77,12 @@ function ConfirmOTP() {
     setIsAnimating(true);
 
     try {
-      await dispatch(veirifyOtp({ phone: phone || '', otp: otpToVerify }));
-
-      // Add success animation
-      const wrapper = document.querySelector('.auth-wrapper');
-      if (wrapper) {
-        wrapper.classList.add('page-exit');
-      }
-
-      setTimeout(() => {
-        setIsAnimating(false);
-      }, 300);
+      const result = await dispatch(veirifyOtp({ phone: phone || '', otp: otpToVerify }));
+      console.log('result: ', result);
     } catch (error) {
       setOtpError(true);
       setIsLoading(false);
       setIsAnimating(false);
-
-      // Clear OTP on error
       setOtpValue('');
     }
   };
@@ -140,15 +115,24 @@ function ConfirmOTP() {
     }, 300);
   };
 
-  if (token && !isAnimating) {
-    return navigate('/');
-  }
-
   const sharedProps = {
     onChange,
     onInput,
     value: otpValue,
   };
+
+  if (loading) {
+    return '+++';
+  }
+
+  if (!phone) {
+    return <Navigate to='/login' replace />;
+  }
+
+  if (userToken) {
+    console.log(userToken);
+    // return <Navigate to='/2' replace />;
+  }
 
   return (
     <div className='auth-wrapper auth'>

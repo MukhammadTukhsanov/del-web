@@ -1,12 +1,11 @@
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
+import { logout } from '@/features/auth/userSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { getUserInfo } from '@/services/profile.services';
 import { CloseOutlined } from '@ant-design/icons';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './style.css'; // Import the CSS file
-import { logout } from '@/features/auth/userSlice';
 
 const ProfileScreen = () => {
   const dispatch = useAppDispatch();

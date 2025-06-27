@@ -1,17 +1,17 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import ConfirmOTP from './auth/confirm-otp';
 import Login from './auth/login';
 import Layout from './components/Layout';
+import { getCurrentUser, refreshToken } from './features/auth/userSlice';
 import ProtectedRoute from './features/protectedRoute';
+import { useAppDispatch, useAppSelector } from './hooks';
 import Basket from './screens/basket';
 import Home from './screens/home';
 import MarketPage from './screens/market-page';
 import Orders from './screens/orders';
 import Profile from './screens/profile';
-import { useAppDispatch, useAppSelector } from './hooks';
-import { useEffect } from 'react';
-import { getCurrentUser, logout, refreshToken } from './features/auth/userSlice';
 
 function App() {
   return (
@@ -23,8 +23,10 @@ function App() {
 
 function AppRoutes() {
   const dispatch = useAppDispatch();
-  const token = useAppSelector((state) => state.user.token);
+  const userToken = useAppSelector((state) => state.user.token);
+  const otpToken = useAppSelector((state) => state.otp.token);
   const loading = useAppSelector((state) => state.user.loading);
+  const token = userToken || otpToken;
 
   useEffect(() => {
     dispatch(refreshToken());
@@ -32,7 +34,7 @@ function AppRoutes() {
 
   useEffect(() => {
     if (!token) return;
-    
+
     dispatch(getCurrentUser());
   }, [token, dispatch]);
 
@@ -40,61 +42,37 @@ function AppRoutes() {
     return <div>Loading...</div>;
   }
 
-  if (!token) {
-    return <div>
-      Auth user page view
-    </div>;
-  }
-
-  return <>
-  User
-  {token}
-  <hr />
-  <button
-    onClick={() => {
-      dispatch(logout());
-    }}
-  >Logout</button>
-  </>
+  // if (!token) {
+  //   return (
+  //     <Routes>
+  //       <Route path='login' element={<Login />} />
+  //       <Route path='confirmOTP' element={<ConfirmOTP />} />
+  //     </Routes>
+  //   );
+  // }
 
   return (
     <Routes>
-      <Route path='/' element={<Layout />}>
-        <Route
-          index
-          element={
-              <Home />
-          }
-        />
-        <Route
-          path='basket'
-          element={
-              <Basket />
-          }
-        />
-        <Route
-          path='orders'
-          element={
-            <ProtectedRoute>
-              <Orders />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='profile'
-          element={
-              <Profile />
-          }
-        />
-        <Route
-          path='market'
-          element={
-              <MarketPage />
-          }
-        />
-        <Route path='login' element={<Login />} />
-        <Route path='confirmOTP' element={<ConfirmOTP />} />
-      </Route>
+      <Route path='/login' element={token ? <Navigate to='/' replace /> : <Login />} />
+      <Route path='/confirmOTP' element={token ? <Navigate to='/' replace /> : <ConfirmOTP />} />
+      {token ? (
+        <Route path='/' element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path='basket' element={<Basket />} />
+          <Route
+            path='orders'
+            element={
+              <ProtectedRoute>
+                <Orders />
+              </ProtectedRoute>
+            }
+          />
+          <Route path='profile' element={<Profile />} />
+          <Route path='market' element={<MarketPage />} />
+        </Route>
+      ) : (
+        <Route path='*' element={<Navigate to='/login' replace />} />
+      )}
     </Routes>
   );
 }
