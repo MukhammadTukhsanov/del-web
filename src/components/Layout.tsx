@@ -18,7 +18,6 @@ export default function Layout() {
 
   return (
     <div style={{ height: '100vh' }}>
-      {' '}
       <Outlet />
       {!shouldHideBottomNav && <BottomNav />}
     </div>

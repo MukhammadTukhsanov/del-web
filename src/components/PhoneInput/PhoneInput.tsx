@@ -227,7 +227,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .phone-input-wrapper {
           position: relative;
           width: 100%;

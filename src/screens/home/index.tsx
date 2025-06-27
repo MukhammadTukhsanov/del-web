@@ -7,12 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import HomeBody from './components/body';
 import LocationModal from './components/location-modal';
 import './style.css';
+import { useAppSelector } from '@/hooks';
 
 const { Search } = Input;
 
 export default function Home() {
+  const user = useAppSelector((state) => state.user.user);
   const [isLocationModalOpen, setLocationModalOpen] = useState(false);
-  const [currentLocation, setCurrentLocation] = useState("O'zbekiston ko'chasi 141");
+  const [currentLocation, setCurrentLocation] = useState(user?.location);
 
   const navigate = useNavigate();
 
@@ -51,10 +53,14 @@ export default function Home() {
               alt='Yo`lda'
             />
             <div className='location' onClick={handleLocationClick} style={{ cursor: 'pointer' }}>
-              <small>Joylashuv</small>
+              <small>
+                Yetkazib berish manzilingiz
+              </small>
               <div className='location-address'>
                 <i className='bi bi-geo-alt-fill'></i>
-                <h6 className='m-0'>{currentLocation}</h6>
+                <h6 className='m-0'>
+                  {currentLocation ? currentLocation?.title : 'Manzilni tanlang'}
+                </h6>
                 <DownOutlined />
               </div>
             </div>

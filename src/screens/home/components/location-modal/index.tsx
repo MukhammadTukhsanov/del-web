@@ -1,70 +1,27 @@
+import LocationSelectorMap from '@/components/LocationSelectorMap';
+import { useAppSelector } from '@/hooks';
 import { ClockCircleOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import { Button, Input, List, Typography } from 'antd';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const { Search } = Input;
 const { Text } = Typography;
 
 interface LocationModalProps {
   onSelectLocation: (location: string) => void;
 }
 
+interface Location {
+  title?: string;
+  lat?: number;
+  lng?: number;
+}
+
 const LocationModal: React.FC<LocationModalProps> = ({ onSelectLocation }) => {
-  const [searchValue, setSearchValue] = useState('');
-
-  // Mock data for recent and popular locations
-  const recentLocations = [
-    {
-      id: 1,
-      name: "O'zbekiston ko'chasi 141",
-      description: 'Sizning joriy manzilingiz',
-      type: 'current',
-    },
-    {
-      id: 2,
-      name: "Amir Temur ko'chasi 23",
-      description: 'Oldingi buyurtma manzili',
-      type: 'recent',
-    },
-    {
-      id: 3,
-      name: 'Mustaqillik maydoni',
-      description: 'Ish joyi',
-      type: 'recent',
-    },
-  ];
-
-  const popularLocations = [
-    {
-      id: 4,
-      name: 'Toshkent Sitisi',
-      description: 'Savdo markazi',
-      type: 'popular',
-    },
-    {
-      id: 5,
-      name: 'Magic City Park',
-      description: "Ko'ngilochar markaz",
-      type: 'popular',
-    },
-    {
-      id: 6,
-      name: 'Next Mall',
-      description: 'Savdo markazi',
-      type: 'popular',
-    },
-    {
-      id: 7,
-      name: 'Chorsu bozori',
-      description: "An'anaviy bozor",
-      type: 'popular',
-    },
-  ];
-
-  const handleSearch = (value: string) => {
-    setSearchValue(value);
-    console.log('Searching for location:', value);
-  };
+  const navigate = useNavigate();
+  const user = useAppSelector((state) => state.user.user);
+  const location = user?.location;
+  const locations: Location[] = user.locations || [];
 
   const handleLocationSelect = (location: any) => {
     onSelectLocation(location.name);
@@ -84,13 +41,37 @@ const LocationModal: React.FC<LocationModalProps> = ({ onSelectLocation }) => {
   return (
     <div className='location-modal' style={{ display: 'flex', flexDirection: 'column' }}>
       <div style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-        {recentLocations.length > 0 && (
+        <div style={{ marginBottom: '24px', flexShrink: 0 }}>
+          <Text strong style={{ fontSize: '16px', marginBottom: '12px', display: 'block' }}>
+            Tanlangan manzil
+          </Text>
+          <div
+            style={{
+              padding: '12px',
+              borderRadius: '8px',
+              backgroundColor: '#f5f5f5',
+              display: 'flex',
+              alignItems: 'center',
+              cursor: 'pointer',
+            }}
+            onClick={() => handleLocationSelect(location)}
+          >
+            {getLocationIcon('current')}
+            <Text style={{ marginLeft: '8px', fontSize: '14px' }}>
+              {location?.title || 'Manzil tanlanmagan'}
+            </Text>
+            <span style={{ marginLeft: 'auto', color: '#8c8c8c', fontSize: '12px' }}>
+              {location?.lat && location.lng ? `${location.lat.toFixed(2)}, ${location.lng.toFixed(2)}` : 'Manzil ma\'lum emas'}
+            </span>
+          </div>
+        </div>
+        {locations.length > 0 && (
           <div style={{ marginBottom: '24px', flexShrink: 0 }}>
             <Text strong style={{ fontSize: '16px', marginBottom: '12px', display: 'block' }}>
               So'nggi manzillar
             </Text>
             <List
-              dataSource={recentLocations}
+              dataSource={locations}
               renderItem={(item) => (
                 <List.Item
                   style={{
@@ -108,15 +89,15 @@ const LocationModal: React.FC<LocationModalProps> = ({ onSelectLocation }) => {
                   }}
                 >
                   <List.Item.Meta
-                    avatar={getLocationIcon(item.type)}
+                    avatar={getLocationIcon('recent')}
                     title={
                       <Text strong style={{ fontSize: '14px' }}>
-                        {item.name}
+                        {item?.title}
                       </Text>
                     }
                     description={
                       <Text type='secondary' style={{ fontSize: '12px' }}>
-                        {item.description}
+                        {item?.lat && item.lng ? `${item.lat.toFixed(2)}, ${item.lng.toFixed(2)}` : 'Manzil ma\'lum emas'}
                       </Text>
                     }
                   />
@@ -143,7 +124,8 @@ const LocationModal: React.FC<LocationModalProps> = ({ onSelectLocation }) => {
           }}
           onClick={() => {
             // Handle current location detection
-            console.log('Getting current location...');
+            // console.log('Getting current location...');
+            navigate('/location');
           }}
         >
           Joriy joylashuvni aniqlash

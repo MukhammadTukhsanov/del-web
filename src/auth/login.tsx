@@ -16,10 +16,6 @@ function Login() {
   const [inputError, setInputError] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  useEffect(() => {
-    console.log('>>>');
-  }, []);
-
   const navigate = useNavigate();
 
   const handlePhoneChange = (formattedPhone: string, cleanPhoneNumber: string) => {

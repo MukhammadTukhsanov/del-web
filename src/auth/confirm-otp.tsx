@@ -13,7 +13,6 @@ function ConfirmOTP() {
   const navigate = useNavigate();
   const loading = useAppSelector((state) => state.otp.loading);
   const phone = useAppSelector((state) => state.otp.phone);
-  const userToken = useAppSelector((state) => state.otp.token);
 
   const [otpValue, setOtpValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -69,7 +68,6 @@ function ConfirmOTP() {
   const handleVerifyOtp = async (otp?: string) => {
     const otpToVerify = otp || otpValue;
 
-    console.log('otpToVerify: ', otpToVerify);
     if (!otpToVerify || otpToVerify.length !== 6) {
       setOtpError(true);
       console.log('otpError');

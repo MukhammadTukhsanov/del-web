@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LanguageModal from './profile-modals/modal';
 import './style.css'; // Import the CSS file
+import UserEditModal from './profile-modals/modal-user-edit';
 
 const ProfileScreen = () => {
   const dispatch = useAppDispatch();
@@ -65,7 +66,6 @@ const ProfileScreen = () => {
   };
 
   const handleConfirmLogout = async () => {
-    console.log('User logged out');
     try {
       await dispatch(logout());
       localStorage.removeItem('auth_token');
@@ -73,7 +73,6 @@ const ProfileScreen = () => {
     } catch {
       console.log('error');
     }
-    setShowLogoutModal(false);
   };
 
   function formatUzbekPhone(phone: string) {
@@ -86,15 +85,10 @@ const ProfileScreen = () => {
 
   return (
     <div className='container'>
-      {/* Bootstrap Icons CDN */}
-      <link
-        rel='stylesheet'
-        href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css'
-      />
-
-      {/* Header */}
       <div className='header'>
-        <h1 className='header-title'>Profil</h1>
+        <h1 className='header-title'>
+          Shaxsiy kabinet
+        </h1>
       </div>
 
       {/* User Info Section */}
@@ -157,7 +151,7 @@ const ProfileScreen = () => {
       {/* help modal */}
       <LanguageModal type={'help'} show={showHelpModal} hide={handleCloseModal} />
       {/* Edit modal */}
-      <LanguageModal type={'edit'} show={showEditModal} hide={handleCloseModal} />
+      <UserEditModal show={showEditModal} hide={handleCloseModal} />
       {/* Logout Confirmation Modal */}
       {showLogoutModal && (
         <div className='modal-overlay' onClick={handleCloseModal}>
