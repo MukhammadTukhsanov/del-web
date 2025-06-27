@@ -4,6 +4,7 @@ import './App.css';
 import ConfirmOTP from './auth/confirm-otp';
 import Login from './auth/login';
 import Layout from './components/Layout';
+import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner';
 import { getCurrentUser, refreshToken } from './features/auth/userSlice';
 import ProtectedRoute from './features/protectedRoute';
 import { useAppDispatch, useAppSelector } from './hooks';
@@ -39,17 +40,8 @@ function AppRoutes() {
   }, [token, dispatch]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
-
-  // if (!token) {
-  //   return (
-  //     <Routes>
-  //       <Route path='login' element={<Login />} />
-  //       <Route path='confirmOTP' element={<ConfirmOTP />} />
-  //     </Routes>
-  //   );
-  // }
 
   return (
     <Routes>

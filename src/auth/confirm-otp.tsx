@@ -1,4 +1,5 @@
 import Button from '@/components/Button/Button';
+import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 import PhoneInput from '@/components/PhoneInput/PhoneInput';
 import { otpSend, veirifyOtp } from '@/features/auth/otpSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks';
@@ -122,18 +123,12 @@ function ConfirmOTP() {
   };
 
   if (loading) {
-    return '+++';
+    return <LoadingSpinner />;
   }
 
   if (!phone) {
     return <Navigate to='/login' replace />;
   }
-
-  if (userToken) {
-    console.log(userToken);
-    // return <Navigate to='/2' replace />;
-  }
-
   return (
     <div className='auth-wrapper auth'>
       <img className='auth-logo' src={require('@/assets/icons/auth/logo-auth.png')} alt='yolda' />
