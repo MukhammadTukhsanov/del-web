@@ -1,4 +1,8 @@
-import { getCurrentUserService, refreshTokenService } from '@/services/auth.services';
+import {
+  getCurrentUserService,
+  refreshTokenService,
+  updateUserService,
+} from '@/services/auth.services';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export const refreshToken = createAsyncThunk('auth/refreshToken', async () => {
@@ -19,6 +23,18 @@ export const getCurrentUser = createAsyncThunk('auth/getCurrentUser', async () =
   }
 });
 
+export const updateCurrentUser = createAsyncThunk(
+  'auth/updateCurrentUser',
+  async (userData: any) => {
+    try {
+      const response = await updateUserService(userData);
+      return response;
+    } catch (error) {
+      throw new Error('Update user failed');
+    }
+  },
+);
+
 const userSlice = createSlice({
   name: 'auth',
   initialState: {
@@ -33,7 +49,7 @@ const userSlice = createSlice({
       state.token = null;
       state.error = null;
       localStorage.removeItem('auth_token');
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -67,6 +83,19 @@ const userSlice = createSlice({
         state.user = null;
         state.error = 'Get current user failed';
       })
+      .addCase(updateCurrentUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateCurrentUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(updateCurrentUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = 'Update user failed';
+      });
   },
 });
 

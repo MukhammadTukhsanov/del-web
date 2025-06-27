@@ -1,10 +1,11 @@
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
-import { logout } from '@/features/auth/userSlice';
+import { logout, updateCurrentUser } from '@/features/auth/userSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { CloseOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LanguageModal from './profile-modals/modal';
 import './style.css'; // Import the CSS file
 
 const ProfileScreen = () => {
@@ -15,18 +16,14 @@ const ProfileScreen = () => {
 
   console.log('user: ', user);
 
-  const [userInfo, setUserInfo] = useState({
-    name: '',
-    phone: '',
-  });
+  const [userName, setUserName] = useState('');
 
   const [showLanguageModal, setShowLanguageModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-
-  const [selectedLanguage, setSelectedLanguage] = useState('uz');
-
-  const languages = [{ code: 'uz', name: "O'zbekcha", flag: '🇺🇿' }];
+  const [showHelpModal, setShowHelpModal] = useState(false);
+  const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
+  const [showUserAgreement, setShowUserAgreement] = useState(false);
 
   const menuItems = [
     {
@@ -39,7 +36,7 @@ const ProfileScreen = () => {
       id: 'help',
       title: 'Yordam',
       icon: 'bi-question-circle',
-      onClick: () => console.log('Yordam clicked'),
+      onClick: () => setShowHelpModal(true),
     },
     {
       id: 'language',
@@ -51,13 +48,13 @@ const ProfileScreen = () => {
       id: 'privacy',
       title: 'Maxfiylik siyosati',
       icon: 'bi-shield-check',
-      onClick: () => console.log('Maxfiylik siyosati clicked'),
+      onClick: () => setShowPrivacyPolicy(true),
     },
     {
       id: 'terms',
       title: 'Foydalanuvchi shartnomasi',
       icon: 'bi-file-text',
-      onClick: () => console.log('Foydalanuvchi shartnomasi clicked'),
+      onClick: () => setShowUserAgreement(true),
     },
   ];
 
@@ -65,20 +62,26 @@ const ProfileScreen = () => {
     setShowLogoutModal(true);
   };
 
-  const handleEditProfile = () => {
-    console.log('Edit profile clicked');
-  };
+  const handleEditProfile = async () => {
+    try {
+      const result = await dispatch(updateCurrentUser({ name: userName }));
 
-  const handleLanguageSelect = (languageCode: string) => {
-    setSelectedLanguage(languageCode);
-    setShowLanguageModal(false);
-    console.log('Language selected:', languageCode);
+      if (updateCurrentUser.fulfilled.match(result)) {
+        handleCloseModal();
+      } else {
+        console.log('Profile update failed');
+      }
+    } catch {
+      console.log('error');
+    }
   };
 
   const handleCloseModal = () => {
     setShowLanguageModal(false);
     setShowLogoutModal(false);
     setShowEditModal(false);
+    setShowHelpModal(false);
+    setShowPrivacyPolicy(false);
   };
 
   const handleConfirmLogout = async () => {
@@ -126,7 +129,13 @@ const ProfileScreen = () => {
               <p className='user-phone'>+{formatUzbekPhone(`${user?.phone}`)}</p>
             </div>
           </div>
-          <button onClick={() => setShowEditModal(true)} className='edit-button'>
+          <button
+            onClick={() => {
+              setUserName(user?.name);
+              setShowEditModal(true);
+            }}
+            className='edit-button'
+          >
             <i className='bi bi-pencil edit-icon'></i>
           </button>
         </div>
@@ -165,55 +174,37 @@ const ProfileScreen = () => {
 
       {/* Bottom Safe Area */}
       <div className='bottom-spacer'></div>
-
+      {/* user agreement */}
+      <LanguageModal type={'agreement'} show={showUserAgreement} hide={handleCloseModal} />
+      {/* privacy policy */}
+      <LanguageModal type={'privacy'} show={showPrivacyPolicy} hide={handleCloseModal} />
       {/* Language Selection Modal */}
-      {showLanguageModal && (
-        <div className='modal-overlay' onClick={handleCloseModal}>
-          <div className='modal-content' onClick={(e) => e.stopPropagation()}>
-            <div className='modal-header'>
-              <h3 className='modal-title'>Tilni tanlang</h3>
-              <button className='close-button' onClick={handleCloseModal}>
-                <i className='bi bi-x'></i>
-              </button>
-            </div>
-            <div className='modal-body'>
-              {languages.map((language) => (
-                <button
-                  key={language.code}
-                  className='language-item'
-                  onClick={() => handleLanguageSelect(language.code)}
-                >
-                  <div className='language-item-left'>
-                    <span className='language-flag'>{language.flag}</span>
-                    <span className='language-name'>{language.name}</span>
-                  </div>
-                  {selectedLanguage === language.code && <i className='bi bi-check check-icon'></i>}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+      <LanguageModal type={'language'} show={showLanguageModal} hide={handleCloseModal} />
+      {/* help modal */}
+      <LanguageModal type={'help'} show={showHelpModal} hide={handleCloseModal} />
+      {/* Edit modal */}
       {showEditModal && (
         <div className='modal-overlay' onClick={handleCloseModal}>
           <div className='logout-modal-content' onClick={(e) => e.stopPropagation()}>
             <div className='p-16 d-flex f-column gap-16'>
-              <div className='d-flex'>
+              <div className='d-flex j-between'>
                 <h1 className='header-title'>Malumotlar</h1>
-                <CloseOutlined />
+                <button onClick={handleCloseModal} className='border-none bg-none'>
+                  <CloseOutlined />
+                </button>
               </div>
               <Input
-                value={`+${formatUzbekPhone(userInfo.phone)}`}
+                value={`+${formatUzbekPhone(user.phone)}`}
                 onChange={() => null}
                 disabled
-                placeholder={userInfo.phone}
+                placeholder={user.phone}
               />
               <Input
-                value={userInfo.name}
-                onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
                 placeholder='Ism va Familiya'
               />
-              <Button title='Yangilash' onClick={() => {}} />
+              <Button title='Yangilash' onClick={handleEditProfile} />
             </div>
           </div>
         </div>

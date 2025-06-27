@@ -1,0 +1,152 @@
+# MAXFIYLIK SIYOSATI
+
+**Kuzatilgan sana:** [Sana]  
+**Amal qilish muddati:** [Sana]
+
+## 1. UMUMIY QOIDALAR
+
+Ushbu Maxfiylik siyosati [Kompaniya nomi] tomonidan boshqariladigan yetkazib berish ilovasida shaxsiy ma'lumotlaringizning to'planishi, ishlatilishi va himoyalanishini tartibga soladi. Ilovamizdan foydalanish orqali siz ushbu siyosatning shartlariga rozilik bildirasiz.
+
+## 2. TO'PLANADIGAN MA'LUMOTLAR
+
+### 2.1 Shaxsiy ma'lumotlar:
+
+- To'liq ism va familiya
+- Telefon raqami
+- Elektron pochta manzili
+- Yetkazib berish manzillari
+- Tug'ilgan sana (ixtiyoriy)
+
+### 2.2 Texnik ma'lumotlar:
+
+- Qurilma identifikatori (IMEI, MAC manzil)
+- IP manzil
+- Joylashuv ma'lumotlari (GPS koordinatalari)
+- Ilova foydalanish statistikasi
+- Brauzer va operatsion tizim ma'lumotlari
+
+### 2.3 To'lov ma'lumotlari:
+
+- Karta raqamining oxirgi 4 raqami
+- To'lov usuli
+- Tranzaksiya tarixi
+
+## 3. MA'LUMOTLARDAN FOYDALANISH MAQSADLARI
+
+Sizning ma'lumotlaringiz quyidagi maqsadlarda ishlatiladi:
+
+- Buyurtmalarni qayta ishlash va yetkazib berish
+- Mijozlar bilan aloqa o'rnatish
+- Xizmat sifatini yaxshilash
+- Texnik yordam ko'rsatish
+- Marketing va reklama (rozilik asosida)
+- Qonun talablarini bajarish
+
+## 4. MA'LUMOTLARNI BAHAM KO'RISH
+
+Sizning shaxsiy ma'lumotlaringiz quyidagi hollarda uchinchi shaxslarga uzatilishi mumkin:
+
+### 4.1 Xizmat ko'rsatuvchi hamkorlar:
+
+- Yetkazib berish kuryerlari
+- To'lov tizimi provayderlari
+- Restoran va do'konlar
+
+### 4.2 Qonuniy talablar:
+
+- Davlat organlari so'rovi asosida
+- Sud qarorlari bo'yicha
+- Jinoyat tergovi doirasida
+
+## 5. MA'LUMOTLARNI SAQLASH MUDDATI
+
+- Aktiv hisoblar: cheksiz muddat
+- Faol bo'lmagan hisoblar: 3 yil
+- To'lov ma'lumotlari: 5 yil
+- Texnik loglar: 1 yil
+
+## 6. MA'LUMOTLAR XAVFSIZLIGI
+
+Biz sizning ma'lumotlaringizni himoya qilish uchun quyidagi choralarni ko'ramiz:
+
+- SSL sertifikatlar orqali ma'lumotlarni shifrlash
+- Xavfsiz serverlar va ma'lumotlar bazalari
+- Kirish huquqlarini cheklash
+- Muntazam xavfsizlik auditi
+- Xodimlarning maxfiylik to'g'risidagi majburiyatlari
+
+## 7. SIZNING HUQUQLARINGIZ
+
+Siz quyidagi huquqlarga egasiz:
+
+### 7.1 Ma'lumotlarga kirish huquqi:
+
+- O'zingiz haqingizdagi ma'lumotlarni ko'rish
+- Ma'lumotlar nusxasini olish
+
+### 7.2 Tuzatish huquqi:
+
+- Noto'g'ri ma'lumotlarni tuzatish
+- To'liq bo'lmagan ma'lumotlarni to'ldirish
+
+### 7.3 O'chirish huquqi:
+
+- Hisobni o'chirish
+- Ma'lum ma'lumotlarni o'chirish (qonun ruxsat bergan hollarda)
+
+### 7.4 Qayta ishlashni cheklash:
+
+- Marketing xabarlaridan voz kechish
+- Ma'lumotlar qayta ishlashini to'xtatish
+
+## 8. COOKIE VA KUZATUV TEXNOLOGIYALARI
+
+Ilovamiz quyidagi texnologiyalardan foydalanadi:
+
+- Session cookie'lar (foydalanuvchi sessiyasini saqlash)
+- Analytics cookie'lar (foydalanish statistikasi)
+- Reklama cookie'lari (maqsadli reklama)
+- Push bildirishnomalar
+
+Siz brauzer sozlamalarida cookie'larni o'chirib qo'yishingiz mumkin.
+
+## 9. BOLALAR MAXFIYLIGI
+
+13 yoshdan kichik bolalardan ma'lumot to'plamayimiz. Agar bunday holat aniqlansa, darhol ma'lumotlar o'chiriladi va ota-onalar xabardor qilinadi.
+
+## 10. O'ZGARISHLAR
+
+Ushbu siyosatga kiritilgan o'zgarishlar:
+
+- Ilovada bildirishnoma orqali e'lon qilinadi
+- Saytda nashr etiladi
+- Muhim o'zgarishlar uchun alohida rozilik olinadi
+
+## 11. ALOQA MA'LUMOTLARI
+
+Maxfiylik bilan bog'liq savollar uchun:
+
+**Elektron pochta:** privacy@[kompaniya].uz  
+**Telefon:** +998 [telefon raqami]  
+**Manzil:** [Kompaniya manzili]
+
+## 12. QONUNIY ASOS
+
+Ushbu siyosat quyidagi qonun hujjatlari asosida ishlab chiqilgan:
+
+- O'zbekiston Respublikasining "Shaxsiy ma'lumotlar to'g'risida"gi Qonuni
+- "Axborotlashtirish to'g'risida"gi Qonun
+- "Elektron tijorat to'g'risida"gi Qonun
+- Davlat xizmatlarini raqamlashtirish bo'yicha normativ hujjatlar
+
+## 13. NIZOLAR HAL QILISH
+
+Maxfiylik bilan bog'liq nizolar:
+
+1. Birinchi navbatda kompaniya bilan bevosita muzokaralar orqali hal qilinadi
+2. Kelishuv bo'lmagan taqdirda O'zbekiston Respublikasi sudlariga murojaat qilish mumkin
+3. Shaxsiy ma'lumotlar bo'yicha Davlat inspeksiyasiga shikoyat qilish huquqi mavjud
+
+---
+
+**Eslatma:** Ushbu siyosat [Sana] dan boshlab amal qiladi. Ilova foydalanishni davom ettirish orqali siz yangi shartlarni qabul qilgan hisoblanasiz.

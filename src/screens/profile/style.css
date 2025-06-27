@@ -14,7 +14,7 @@
 .header-title {
   font-size: 20px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: #3c486b;
   text-align: center;
   margin: 0;
 }
@@ -62,13 +62,13 @@
 .user-name {
   font-size: 18px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: #3c486b;
   margin: 0;
 }
 
 .user-phone {
   font-size: 14px;
-  color: #666666;
+  color: #3c486b90;
   margin-top: 4px;
 }
 
@@ -140,7 +140,7 @@
 .menu-text {
   font-size: 16px;
   font-weight: 500;
-  color: #1a1a1a;
+  color: #3c486b;
 }
 
 .chevron-icon {
@@ -195,190 +195,6 @@
 .bottom-spacer {
   height: 32px;
 }
-
-/* Modal styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 16px;
-  animation: fadeIn 0.3s ease-out;
-}
-
-.modal-content {
-  background-color: #ffffff;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 400px;
-  max-height: 80vh;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  animation: slideUp 0.3s ease-out;
-  transform: translateY(0);
-}
-
-.modal-header {
-  padding: 20px 20px 16px 20px;
-  border-bottom: 1px solid #f0f0f0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.modal-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin: 0;
-}
-
-.close-button {
-  background: none;
-  border: none;
-  font-size: 24px;
-  color: #666666;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-}
-
-.modal-body {
-  padding: 8px 0;
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.language-item {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.language-item:hover {
-  background-color: #f9f9f9;
-}
-
-.language-item-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.language-flag {
-  font-size: 24px;
-}
-
-.language-name {
-  font-size: 16px;
-  font-weight: 500;
-  color: #1a1a1a;
-}
-
-.check-icon {
-  font-size: 20px;
-  color: #ff9556;
-}
-
-/* Logout Modal Styles */
-.logout-modal-content {
-  background-color: #ffffff;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 340px;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  animation: slideUp 0.3s ease-out;
-  transform: translateY(0);
-}
-
-.logout-modal-header {
-  padding: 24px 24px 16px 24px;
-  text-align: center;
-}
-
-.logout-modal-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background-color: #fee2e2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 16px auto;
-}
-
-.logout-modal-icon-symbol {
-  font-size: 24px;
-  color: #ef4444;
-}
-
-.logout-modal-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin: 0 0 8px 0;
-}
-
-.logout-modal-text {
-  font-size: 14px;
-  color: #666666;
-  margin: 0;
-  line-height: 1.4;
-}
-
-.logout-modal-actions {
-  padding: 16px 24px 24px 24px;
-  display: flex;
-  gap: 12px;
-}
-
-.cancel-button {
-  flex: 1;
-  padding: 12px 24px;
-  background-color: #f5f5f5;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  color: #666666;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.cancel-button:hover {
-  background-color: #e5e5e5;
-}
-
-.confirm-button {
-  flex: 1;
-  padding: 12px 24px;
-  background-color: #ef4444;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  color: #ffffff;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.confirm-button:hover {
-  background-color: #dc2626;
-}
-
 /* Keyframe Animations */
 @keyframes fadeIn {
   from {
