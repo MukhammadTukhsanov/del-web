@@ -246,7 +246,7 @@
   position: relative;
 }
 
-.modal-header::before {
+/* .modal-header::before {
   content: '';
   position: absolute;
   top: 12px;
@@ -256,7 +256,7 @@
   height: 4px;
   background: #d1d5db;
   border-radius: 2px;
-}
+} */
 
 .modal-title {
   font-size: 1.125rem;
@@ -739,10 +739,6 @@
 
   .modal-header {
     border-bottom-color: #334155;
-  }
-
-  .modal-header::before {
-    background: #64748b;
   }
 
   .modal-title {

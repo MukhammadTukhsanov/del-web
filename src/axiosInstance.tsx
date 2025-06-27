@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://scrappio.site/api', 
+  baseURL: 'https://api.yulda24.uz',
   timeout: 15000,
 });
 
@@ -13,7 +13,7 @@ axiosInstance.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 axiosInstance.interceptors.response.use(
@@ -23,9 +23,9 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     console.error('API Error:', error.response || error.message);
-    
+
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosInstance;

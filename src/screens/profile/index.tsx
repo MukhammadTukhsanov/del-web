@@ -1,8 +1,5 @@
-import Button from '@/components/Button/Button';
-import Input from '@/components/Input/Input';
-import { logout, updateCurrentUser } from '@/features/auth/userSlice';
+import { logout } from '@/features/auth/userSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { CloseOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LanguageModal from './profile-modals/modal';
@@ -13,10 +10,6 @@ const ProfileScreen = () => {
   const navigate = useNavigate();
 
   const user = useAppSelector((state) => state.user.user);
-
-  console.log('user: ', user);
-
-  const [userName, setUserName] = useState('');
 
   const [showLanguageModal, setShowLanguageModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -62,26 +55,13 @@ const ProfileScreen = () => {
     setShowLogoutModal(true);
   };
 
-  const handleEditProfile = async () => {
-    try {
-      const result = await dispatch(updateCurrentUser({ name: userName }));
-
-      if (updateCurrentUser.fulfilled.match(result)) {
-        handleCloseModal();
-      } else {
-        console.log('Profile update failed');
-      }
-    } catch {
-      console.log('error');
-    }
-  };
-
   const handleCloseModal = () => {
     setShowLanguageModal(false);
     setShowLogoutModal(false);
     setShowEditModal(false);
     setShowHelpModal(false);
     setShowPrivacyPolicy(false);
+    setShowUserAgreement(false);
   };
 
   const handleConfirmLogout = async () => {
@@ -129,13 +109,7 @@ const ProfileScreen = () => {
               <p className='user-phone'>+{formatUzbekPhone(`${user?.phone}`)}</p>
             </div>
           </div>
-          <button
-            onClick={() => {
-              setUserName(user?.name);
-              setShowEditModal(true);
-            }}
-            className='edit-button'
-          >
+          <button onClick={() => setShowEditModal(true)} className='edit-button'>
             <i className='bi bi-pencil edit-icon'></i>
           </button>
         </div>
@@ -183,32 +157,7 @@ const ProfileScreen = () => {
       {/* help modal */}
       <LanguageModal type={'help'} show={showHelpModal} hide={handleCloseModal} />
       {/* Edit modal */}
-      {showEditModal && (
-        <div className='modal-overlay' onClick={handleCloseModal}>
-          <div className='logout-modal-content' onClick={(e) => e.stopPropagation()}>
-            <div className='p-16 d-flex f-column gap-16'>
-              <div className='d-flex j-between'>
-                <h1 className='header-title'>Malumotlar</h1>
-                <button onClick={handleCloseModal} className='border-none bg-none'>
-                  <CloseOutlined />
-                </button>
-              </div>
-              <Input
-                value={`+${formatUzbekPhone(user.phone)}`}
-                onChange={() => null}
-                disabled
-                placeholder={user.phone}
-              />
-              <Input
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-                placeholder='Ism va Familiya'
-              />
-              <Button title='Yangilash' onClick={handleEditProfile} />
-            </div>
-          </div>
-        </div>
-      )}
+      <LanguageModal type={'edit'} show={showEditModal} hide={handleCloseModal} />
       {/* Logout Confirmation Modal */}
       {showLogoutModal && (
         <div className='modal-overlay' onClick={handleCloseModal}>
