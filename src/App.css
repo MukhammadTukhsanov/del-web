@@ -75,3 +75,6 @@
 .w-100 {
   width: 100%;
 }
+.ant-tabs-ink-bar {
+  background-color: #ff9556 !important;
+}

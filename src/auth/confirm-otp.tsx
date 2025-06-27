@@ -69,8 +69,10 @@ function ConfirmOTP() {
   const handleVerifyOtp = async (otp?: string) => {
     const otpToVerify = otp || otpValue;
 
+    console.log('otpToVerify: ', otpToVerify);
     if (!otpToVerify || otpToVerify.length !== 6) {
       setOtpError(true);
+      console.log('otpError');
       return;
     }
 
@@ -78,12 +80,12 @@ function ConfirmOTP() {
     setIsAnimating(true);
 
     try {
-      const result = await dispatch(veirifyOtp({ phone: phone || '', otp: otpToVerify }));
-      console.log('result: ', result);
+      await dispatch(veirifyOtp({ phone: phone || '', otp: otpToVerify })).unwrap();
     } catch (error) {
       setOtpError(true);
       setIsLoading(false);
       setIsAnimating(false);
+      setCountdown(0);
       setOtpValue('');
     }
   };
