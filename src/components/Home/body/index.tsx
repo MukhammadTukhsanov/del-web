@@ -1,6 +1,5 @@
 import { useAppSelector } from '@/hooks';
 import HeaderMenu from './header-menu/header-menu';
-// import HorixontalMenu from './horizontal-menu';
 import MerchantCard from './merchant-card';
 
 export default function HomeBody() {
@@ -24,14 +23,9 @@ export default function HomeBody() {
         />
       </svg>
       <HeaderMenu />
-      {/* <HorixontalMenu /> */}
-      {
-        merchants.map((merchant, index) => <MerchantCard key={index} merchant={merchant} />)
-      }
-      {/* <MerchantCard />
-      <MerchantCard />
-      <MerchantCard />
-      <MerchantCard /> */}
+      {merchants.map((merchant, index) => (
+        <MerchantCard key={index} merchant={merchant} />
+      ))}
     </div>
   );
 }

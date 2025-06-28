@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import { getMerchants } from '@/features/merchants';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { useNavigate } from 'react-router-dom';
-import HomeBody from './components/body';
-import LocationModal from './components/location-modal';
+import HomeBody from '../../components/Home/body';
+import LocationModal from '../../components/Home/location-modal';
 import './style.css';
 
 const { Search } = Input;

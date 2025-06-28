@@ -22,7 +22,8 @@ const initialState: CartState = {
 };
 
 const parsePrice = (priceStr: string): number => {
-  return parseInt(priceStr.replace(/[^\d]/g, '')) || 0;
+  return parseInt(priceStr);
+  // return parseInt(priceStr.replace(/[^\d]/g, '')) || 0;
 };
 
 const calculateTotals = (items: CartItem[]) => {

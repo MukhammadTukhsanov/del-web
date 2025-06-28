@@ -1,11 +1,12 @@
+import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 import { addToCart, removeFromCart } from '@/features/cart/cartSlice';
 import { getMerchantProducts } from '@/features/merchants';
 import { useAppDispatch } from '@/hooks';
 import { RootState } from '@/store';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 const MarketPage = () => {
   let params = useParams();
@@ -14,9 +15,25 @@ const MarketPage = () => {
   const [scrolled, setScrolled] = useState(false);
 
   const dispatch = useAppDispatch();
-  const products = useSelector((state: RootState) => state.merchants.products);
-  const cartItems = useSelector((state: RootState) => state.cart.items);
 
+  const location = useLocation();
+  const merchant = location.state;
+
+  const { photo, deliveryTime, deliveryPrice, businessAddress, businessName, rate } = merchant;
+
+  const merchantInformation = {
+    photo: photo,
+    deliveryPrice: deliveryPrice,
+    deliveryTime: deliveryTime,
+    businessAddress: businessAddress,
+    businessName: businessName,
+    rate: rate,
+  };
+
+  // const { products, merchantInformation, loading, error } = useSelector(
+  const { products, loading, error } = useSelector((state: RootState) => state.merchants);
+
+  const cartItems = useSelector((state: RootState) => state.cart.items);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,152 +45,31 @@ const MarketPage = () => {
   }, []);
 
   useEffect(() => {
+    console.log('merchantInformation: ', merchantInformation);
+
     if (!marketId) {
       return;
     }
-    
+
+    // Fix: Dispatch both actions to get merchant info and products
+    // dispatch(getMerchantInformation(marketId));
     dispatch(getMerchantProducts(marketId));
   }, [dispatch, marketId]);
-
-  const marketData = {
-    name: 'Yangi Bozor',
-    image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&h=400&fit=crop',
-    rating: 4.8,
-    deliveryTime: '20-30 daq',
-    deliveryPrice: "15,000 so'm",
-    location: 'Shahar markazi',
-  };
 
   const categories = [
     {
       name: 'Toza mevalar',
-      items: [
-        {
-          id: 'apple-organic',
-          name: 'Organik olma',
-          price: "25,000 so'm/kg",
-          image: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=150&h=150&fit=crop',
-        },
-        {
-          id: 'banana-fresh',
-          name: 'Yangi banan',
-          price: "18,000 so'm/kg",
-          image:
-            'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=150&h=150&fit=crop',
-        },
-        {
-          id: 'strawberry-box',
-          name: 'Qulupnay',
-          price: "35,000 so'm/quti",
-          image:
-            'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=150&h=150&fit=crop',
-        },
-        {
-          id: 'orange-bag',
-          name: "Apelsin to'plami",
-          price: "28,000 so'm/xalta",
-          image: 'https://images.unsplash.com/photo-1547514701-42782101795e?w=150&h=150&fit=crop',
-        },
-      ],
     },
     {
       name: 'Sabzavotlar',
-      items: [
-        {
-          id: 'tomato-fresh',
-          name: 'Yangi pomidor',
-          price: "12,000 so'm/kg",
-          image:
-            'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=150&h=150&fit=crop',
-        },
-        {
-          id: 'lettuce-green',
-          name: 'Yashil salat',
-          price: "8,000 so'm/dona",
-          image:
-            'https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?w=150&h=150&fit=crop',
-        },
-        {
-          id: 'pepper-colorful',
-          name: 'Rang-barang qalampir',
-          price: "22,000 so'm/kg",
-          image: 'https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=150&h=150&fit=crop',
-        },
-        {
-          id: 'carrot-bunch',
-          name: 'Sabzi',
-          price: "10,000 so'm/bog'lam",
-          image:
-            'https://images.unsplash.com/photo-1445282768818-728615cc910a?w=150&h=150&fit=crop',
-        },
-      ],
     },
     {
       name: 'Sut mahsulotlari',
-      items: [
-        {
-          id: 'milk-organic',
-          name: 'Organik sut',
-          price: "18,000 so'm/litr",
-          image: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=150&h=150&fit=crop',
-        },
-        {
-          id: 'eggs-dozen',
-          name: 'Tuxum',
-          price: "22,000 so'm/o'nlik",
-          image:
-            'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=150&h=150&fit=crop',
-        },
-        {
-          id: 'yogurt-greek',
-          name: 'Yunoncha yogurt',
-          price: "25,000 so'm/paket",
-          image:
-            'https://images.unsplash.com/photo-1571212515416-fca0b8b3e3e8?w=150&h=150&fit=crop',
-        },
-        {
-          id: 'cheese-block',
-          name: 'Pishloq',
-          price: "45,000 so'm/blok",
-          image:
-            'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=150&h=150&fit=crop',
-        },
-      ],
     },
     {
       name: 'Non mahsulotlari',
-      items: [
-        {
-          id: 'bread-fresh',
-          name: 'Yangi non',
-          price: "5,000 so'm/dona",
-          image:
-            'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150&h=150&fit=crop',
-        },
-        {
-          id: 'croissant-pack',
-          name: 'Kruassan',
-          price: "12,000 so'm/paket",
-          image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=150&h=150&fit=crop',
-        },
-        {
-          id: 'bagel-pack',
-          name: 'Bagel',
-          price: "8,000 so'm/paket",
-          image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=150&h=150&fit=crop',
-        },
-        {
-          id: 'muffin-box',
-          name: 'Keks',
-          price: "15,000 so'm/quti",
-          image:
-            'https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=150&h=150&fit=crop',
-        },
-      ],
     },
   ];
-
-  const currentCategory = categories.find((cat) => cat.name === activeCategory);
 
   const getCartItemCount = (itemId: string) => {
     const cartItem = cartItems.find((item) => item.id === itemId);
@@ -186,7 +82,7 @@ const MarketPage = () => {
         id: item.id,
         name: item.name,
         price: item.price,
-        image: item.image,
+        image: item.photo, // Fix: Use 'photo' instead of 'image'
         category: activeCategory,
       }),
     );
@@ -195,6 +91,39 @@ const MarketPage = () => {
   const handleRemoveFromCart = (itemId: string) => {
     dispatch(removeFromCart(itemId));
   };
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  // Fix: Add error handling
+  if (error) {
+    return (
+      <div style={{ padding: '2rem', textAlign: 'center' }}>
+        <p>Error: {error}</p>
+        <button
+          onClick={() => {
+            if (marketId) {
+              // dispatch(getMerchantInformation(marketId));
+              dispatch(getMerchantProducts(marketId));
+            }
+          }}
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  // Fix: Add null check for merchantInformation
+  if (!merchantInformation) {
+    return (
+      <div style={{ padding: '2rem', textAlign: 'center' }}>
+        <p>Merchant information not found</p>
+        <button onClick={() => navigate(-1)}>Go Back</button>
+      </div>
+    );
+  }
 
   return (
     <div className='market-page'>
@@ -414,6 +343,41 @@ const MarketPage = () => {
         .add-to-cart-btn:hover {
           background-color: #e8834a;
         }
+
+        .cart-controls {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-top: 0.5rem;
+          gap: 0.5rem;
+        }
+
+        .cart-btn {
+          width: 2rem;
+          height: 2rem;
+          border-radius: 0.25rem;
+          border: 1px solid #ff9556;
+          background-color: white;
+          color: #ff9556;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .cart-btn:hover {
+          background-color: #ff9556;
+          color: white;
+        }
+
+        .cart-count {
+          font-weight: 600;
+          color: #111827;
+          min-width: 1.5rem;
+          text-align: center;
+        }
         
         .bottom-spacing {
           height: 5rem;
@@ -428,12 +392,18 @@ const MarketPage = () => {
          top: 16px;
          left: 16px;
          border: none;
-         font-size: 20px
+         font-size: 20px;
+         cursor: pointer;
         }
       `}</style>
+
       {/* Header Image */}
       <div className='market-header'>
-        <img src={marketData.image} alt={marketData.name} className='market-image' />
+        <img
+          src={merchantInformation.photo || '/placeholder-image.jpg'}
+          alt={merchantInformation.businessName}
+          className='market-image'
+        />
         <div className='image-overlay'></div>
         <button onClick={() => navigate(-1)} className='market-back'>
           <ArrowLeftOutlined />
@@ -442,28 +412,32 @@ const MarketPage = () => {
 
       {/* Market Info */}
       <div className='market-info'>
-        <h1 className='market-title'>{marketData.name}</h1>
+        <h1 className='market-title'>{merchantInformation.businessName}</h1>
 
         <div className='market-details'>
           <div className='rating-container'>
             <div className='star-icon'>★</div>
-            <span className='rating-text'>{marketData.rating}</span>
+            <span className='rating-text'>{merchantInformation.rate || 'N/A'}</span>
           </div>
 
           <div className='detail-item'>
             <div className='detail-icon'>🕐</div>
-            <span className='detail-text'>{marketData.deliveryTime}</span>
+            <span className='detail-text'>{merchantInformation.deliveryTime || 'N/A'}</span>
           </div>
 
           <div className='detail-item'>
             <div className='detail-icon'>🚚</div>
-            <span className='detail-text'>{marketData.deliveryPrice}</span>
+            <span className='detail-text'>
+              {merchantInformation.deliveryPrice
+                ? `${new Intl.NumberFormat('uz-UZ').format(merchantInformation.deliveryPrice)} so'm`
+                : 'N/A'}
+            </span>
           </div>
         </div>
 
         <div className='location-container'>
           <div className='detail-icon'>📍</div>
-          <span className='location-text'>{marketData.location}</span>
+          <span className='location-text'>{merchantInformation.businessAddress || 'N/A'}</span>
         </div>
       </div>
 
@@ -490,13 +464,19 @@ const MarketPage = () => {
             const cartCount = getCartItemCount(item.id);
 
             return (
-              <div key={index} className='product-card'>
+              <div key={item.id || index} className='product-card'>
                 <div className='product-image-container'>
-                  <img src={item.photo} alt={item.name} className='product-image' />
+                  <img
+                    src={item.photo || '/placeholder-product.jpg'}
+                    alt={item.name}
+                    className='product-image'
+                  />
                 </div>
                 <div className='product-info'>
                   <h3 className='product-name'>{item.name}</h3>
-                  <p className='product-price'>{item.price}</p>
+                  <p className='product-price'>
+                    {new Intl.NumberFormat('uz-UZ').format(item.price)} so'm
+                  </p>
 
                   {cartCount === 0 ? (
                     <button className='add-to-cart-btn' onClick={() => handleAddToCart(item)}>
