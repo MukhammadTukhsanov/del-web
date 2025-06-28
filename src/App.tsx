@@ -58,34 +58,26 @@ function AppRoutes() {
 
   return (
     <Routes>
-      {/* Public Routes */}
-      {!token && (
-        <>
-          <Route path='/login' element={<Login />} />
-          <Route path='/confirmOTP' element={<ConfirmOTP />} />
-          <Route path='*' element={<Navigate to='/login' replace />} />
-        </>
-      )}
+      <Route path="/login" element={<Login />} />
+      <Route path="/confirmOTP" element={<ConfirmOTP />} />
 
-      {/* Private Routes */}
-      {token && (
-        <Route path='/' element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path='basket' element={<Basket />} />
-          <Route
-            path='orders'
-            element={
-              <ProtectedRoute>
-                <Orders />
-              </ProtectedRoute>
-            }
-          />
-          <Route path='profile' element={<Profile />} />
-          <Route path='market' element={<MarketPage />} />
-          <Route path='location' element={<LocationSelectorMap />} />
-          <Route path='*' element={<Navigate to='/' replace />} />
-        </Route>
-      )}
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Home />} />
+        <Route path="basket" element={<Basket />} />
+        <Route path="orders" element={<Orders />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="market" element={<MarketPage />} />
+        <Route path="location" element={<LocationSelectorMap />} />
+      </Route>
+
+      <Route path="*" element={<Navigate to={token ? '/' : '/login'} replace />} />
     </Routes>
   );
 }
