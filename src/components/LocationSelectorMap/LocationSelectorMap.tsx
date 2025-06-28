@@ -1,131 +1,99 @@
 import { updateCurrentUser } from '@/features/auth/userSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { AimOutlined, ArrowLeftOutlined, LoadingOutlined } from '@ant-design/icons';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
+import mapboxgl, { Map as MapboxMap } from 'mapbox-gl';
+import { AddressAutofill, SearchBox } from '@mapbox/search-js-react';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
 import Modal from '../Modal/Modal';
 import './LocationSelectorMap.css';
-
-// delete (L.Icon.Default.prototype as any)._getIconUrl;
-// L.Icon.Default.mergeOptions({
-//   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-//   iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-//   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-// });
-
-function CenterListener({ onMove }: { onMove: (center: L.LatLng) => void }) {
-  useMapEvents({
-    moveend(e) {
-      onMove(e.target.getCenter());
-    },
-  });
-  return null;
-}
+import AddressSearch from './AutoCompleteSearch';
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2hha2hyaWxsbzEzIiwiYSI6ImNtY2c1eGI2cDBmbHUyaXNlbzkxd2ZteDAifQ.zX4h_ennSb1_kaTgD0Ijmg';
 
 export default function CenteredLocationSelector() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
-  const [center, setCenter] = useState<L.LatLngLiteral>({
+
+  const [center, setCenter] = useState<{ lat: number; lng: number }>({
     lat: 41.2995,
     lng: 69.2401,
   });
-  const [currentLocation, setCurrentLocation] = useState<L.LatLngLiteral | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [address, setAddress] = useState('');
   const [addressName, setAddressName] = useState('');
-
   const [showAdresTitleModal, setShowAdresTitleModal] = useState(false);
 
-  const mapRef = useRef<L.Map>(null);
+  const mapRef = useRef<MapboxMap | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!mapContainerRef.current) return;
+
+    const map = new mapboxgl.Map({
+      container: mapContainerRef.current,
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [
+        69.2401,
+        41.2995,
+      ],
+      zoom: 10,
+    });
+
+    mapRef.current = map;
+
+    map.on('moveend', (e) => {
+      console.log('Map moved:', e);
+      const center = e.target.getCenter();
+      const newCenter = { lat: center.lat, lng: center.lng };
+      setCenter(newCenter);
+    });
+
+    return () => {
+      map.remove();
+    };
+  }, [mapContainerRef]);
+
+  const handleSelect = () => {
+    if (mapRef.current && addressName.length) {
+      const currentCenter = mapRef.current.getCenter();
+      dispatch(
+        updateCurrentUser({
+          location: {
+            lat: currentCenter.lat,
+            lng: currentCenter.lng,
+            addressName,
+          },
+          locations: [
+            ...(user.locationHistory || []).slice(0, 3),
+            { lat: currentCenter.lat, lng: currentCenter.lng },
+          ],
+        }),
+      );
+      setShowAdresTitleModal(false);
+      navigate(-1);
+    }
+  };
 
   const getCurrentLocation = () => {
-    if (!navigator.geolocation) {
-      alert("Geolokatsiya bu brauzerda qo'llab-quvvatlanmaydi");
-      return;
-    }
-
     setIsLoading(true);
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        const newLocation = { lat: latitude, lng: longitude };
-        setCurrentLocation(newLocation);
-        setCenter(newLocation);
-
-        // Move map to current location
+        setCenter({ lat: latitude, lng: longitude });
         if (mapRef.current) {
-          mapRef.current.setView([latitude, longitude], 15);
+          mapRef.current.setCenter([longitude, latitude]);
         }
-
-        setIsLoading(false);
-        reverseGeocode(latitude, longitude);
-      },
-      (err) => {
-        console.error('Geolocation error:', err.message);
-        alert("Joylashuvni aniqlab bo'lmadi. Iltimos, qaytadan urinib ko'ring.");
         setIsLoading(false);
       },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 60000,
+      (error) => {
+        console.error('Error getting current location:', error);
+        setIsLoading(false);
       },
     );
-  };
-
-  const reverseGeocode = async (lat: number, lng: number) => {
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`,
-      );
-      const data = await response.json();
-      if (data.display_name) {
-        setAddress(data.display_name);
-      }
-    } catch (error) {
-      console.error('Reverse geocoding error:', error);
-    }
-  };
-
-  // Initial location fetch
-  useEffect(() => {
-    getCurrentLocation();
-  }, []);
-
-  // Handle map center change
-  const handleMapMove = (newCenter: L.LatLng) => {
-    setCenter(newCenter);
-    reverseGeocode(newCenter.lat, newCenter.lng);
-  };
-
-  const handleSelect = () => {
-    if (mapRef.current) {
-      const currentCenter = mapRef.current.getCenter();
-      if (addressName.length) {
-        dispatch(
-          updateCurrentUser({
-            location: {
-              lat: currentCenter.lat,
-              lng: currentCenter.lng,
-              addressName,
-            },
-            locations: [
-              ...(user.locationHistory || []).slice(0, 3),
-              { lat: currentCenter.lat, lng: currentCenter.lng },
-            ],
-          }),
-        );
-        setShowAdresTitleModal(false);
-        navigate(-1);
-      }
-    }
-  };
+  }
 
   const handleBack = () => {
     navigate(-1);
@@ -152,35 +120,28 @@ export default function CenteredLocationSelector() {
           />
         </div>
       </Modal>
+
       <div className='map-header'>
         <button onClick={handleBack} className='map-back-button'>
           <ArrowLeftOutlined />
         </button>
-        <div className='map-header-address'>
-          <h6>{address}</h6>
-        </div>
+        <form className='map-header-address'>
+          <AddressSearch location={center} />
+        </form>
       </div>
 
-      <MapContainer
-        center={center}
-        zoom={13}
-        zoomControl={false}
-        scrollWheelZoom
-        className='map-container'
-        ref={mapRef}
-      >
-        <TileLayer
-          url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-          attribution='&copy; OpenStreetMap contributors'
-        />
-        <CenterListener onMove={handleMapMove} />
-      </MapContainer>
+      <div
+        id='map-container'
+        ref={mapContainerRef}
+        style={{ height: '100%', width: '100%' }}
+      />
 
       <img
         src={require('@/assets/icons/map-pin.svg')}
         alt='Map center marker'
         className='map-center-marker'
       />
+
       <button
         onClick={getCurrentLocation}
         disabled={isLoading}
@@ -190,7 +151,10 @@ export default function CenteredLocationSelector() {
         {isLoading ? <LoadingOutlined /> : <AimOutlined />}
       </button>
 
-      <button onClick={() => setShowAdresTitleModal(true)} className='map-bottom-controller'>
+      <button
+        onClick={() => setShowAdresTitleModal(true)}
+        className='map-bottom-controller'
+      >
         Bu joylashuvni tanlash
       </button>
     </div>

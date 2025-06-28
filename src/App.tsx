@@ -1,6 +1,7 @@
 import { JSX, useEffect, useMemo } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 import ConfirmOTP from './auth/confirm-otp';
 import Login from './auth/login';

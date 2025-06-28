@@ -77,17 +77,13 @@
 }
 
 .map-header-address {
-  padding: 16px;
-  background-color: #fff;
   width: inherit;
-  border-radius: 12px;
-  border: 1px solid #3c486b60;
 }
-.map-header-address h6 {
-  flex: 1;
+.map-header-address input {
+  width: 100%;
+  font-size: 16px;
   color: #3c486b;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin: 0;
+  padding: 8px 16px;
+  border-radius: 12px;
+  background-color: #fff;
 }
