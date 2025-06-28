@@ -1,5 +1,3 @@
-// Post
-
 import axiosInstance from '@/axiosInstance';
 
 export async function otpSendService(phone: string) {

@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://api.yulda24.uz',
-  timeout: 15000,
+  // baseURL: 'https://api.yulda24.uz',
+  baseURL: 'http://localhost:2000',
+  timeout: 5000,
 });
 
 axiosInstance.interceptors.request.use(

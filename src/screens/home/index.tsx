@@ -1,22 +1,27 @@
 import BottomSheet from '@/components/BottomSheet';
 import { DownOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, Input } from 'antd';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import HomeBody from './components/body';
 import LocationModal from './components/location-modal';
 import './style.css';
-import { useAppSelector } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { getMerchants } from '@/features/merchants';
 
 const { Search } = Input;
 
 export default function Home() {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
   const [isLocationModalOpen, setLocationModalOpen] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(user?.location);
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    dispatch(getMerchants());
+  }, [dispatch]);
 
   const handleSearch = (value: any) => {
     console.log('Searching for:', value);
