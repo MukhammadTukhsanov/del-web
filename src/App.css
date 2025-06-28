@@ -1,4 +1,4 @@
-@import "leaflet/dist/leaflet.css";
+@import 'leaflet/dist/leaflet.css';
 
 :root {
   --color-primary: #ff9556;
@@ -40,6 +40,15 @@
 }
 .mb-0 {
   margin-bottom: 0;
+}
+.mb-4 {
+  margin-bottom: 4px;
+}
+.mb-8 {
+  margin-bottom: 8px;
+}
+.mb-16 {
+  margin-bottom: 16px;
 }
 .mt-4 {
   margin-top: 4px;

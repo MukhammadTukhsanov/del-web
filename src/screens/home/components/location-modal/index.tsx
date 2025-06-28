@@ -1,8 +1,7 @@
-import LocationSelectorMap from '@/components/LocationSelectorMap';
 import { useAppSelector } from '@/hooks';
 import { ClockCircleOutlined, EnvironmentOutlined } from '@ant-design/icons';
-import { Button, Input, List, Typography } from 'antd';
-import React, { useState } from 'react';
+import { Button, List, Typography } from 'antd';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const { Text } = Typography;
@@ -26,6 +25,11 @@ const LocationModal: React.FC<LocationModalProps> = ({ onSelectLocation }) => {
   const handleLocationSelect = (location: any) => {
     onSelectLocation(location.name);
   };
+
+  useEffect(() => {
+    console.log('location: ', location);
+    console.log('locations: ', locations);
+  }, []);
 
   const getLocationIcon = (type: string) => {
     switch (type) {
@@ -58,10 +62,12 @@ const LocationModal: React.FC<LocationModalProps> = ({ onSelectLocation }) => {
           >
             {getLocationIcon('current')}
             <Text style={{ marginLeft: '8px', fontSize: '14px' }}>
-              {location?.title || 'Manzil tanlanmagan'}
+              {location?.addressName || 'Manzil tanlanmagan'}
             </Text>
             <span style={{ marginLeft: 'auto', color: '#8c8c8c', fontSize: '12px' }}>
-              {location?.lat && location.lng ? `${location.lat.toFixed(2)}, ${location.lng.toFixed(2)}` : 'Manzil ma\'lum emas'}
+              {location?.lat && location.lng
+                ? `${location.lat.toFixed(2)}, ${location.lng.toFixed(2)}`
+                : "Manzil ma'lum emas"}
             </span>
           </div>
         </div>
@@ -97,7 +103,9 @@ const LocationModal: React.FC<LocationModalProps> = ({ onSelectLocation }) => {
                     }
                     description={
                       <Text type='secondary' style={{ fontSize: '12px' }}>
-                        {item?.lat && item.lng ? `${item.lat.toFixed(2)}, ${item.lng.toFixed(2)}` : 'Manzil ma\'lum emas'}
+                        {item?.lat && item.lng
+                          ? `${item.lat.toFixed(2)}, ${item.lng.toFixed(2)}`
+                          : "Manzil ma'lum emas"}
                       </Text>
                     }
                   />

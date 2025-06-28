@@ -1,14 +1,14 @@
 import BottomSheet from '@/components/BottomSheet';
 import { DownOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, Input } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import { getMerchants } from '@/features/merchants';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { useNavigate } from 'react-router-dom';
 import HomeBody from './components/body';
 import LocationModal from './components/location-modal';
 import './style.css';
-import { useAppDispatch, useAppSelector } from '@/hooks';
-import { getMerchants } from '@/features/merchants';
 
 const { Search } = Input;
 
@@ -58,13 +58,11 @@ export default function Home() {
               alt='Yo`lda'
             />
             <div className='location' onClick={handleLocationClick} style={{ cursor: 'pointer' }}>
-              <small>
-                Yetkazib berish manzilingiz
-              </small>
+              <small>Yetkazib berish manzilingiz</small>
               <div className='location-address'>
                 <i className='bi bi-geo-alt-fill'></i>
                 <h6 className='m-0'>
-                  {currentLocation ? currentLocation?.title : 'Manzilni tanlang'}
+                  {currentLocation ? currentLocation?.addressName : 'Manzilni tanlang'}
                 </h6>
                 <DownOutlined />
               </div>
