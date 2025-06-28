@@ -1,6 +1,6 @@
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 import { addToCart, removeFromCart } from '@/features/cart/cartSlice';
-import { getMerchantProducts } from '@/features/merchants';
+import { getMerchantProducts } from '@/features/merchants/merchantsSlice';
 import { useAppDispatch } from '@/hooks';
 import { RootState } from '@/store';
 import { ArrowLeftOutlined } from '@ant-design/icons';

@@ -3,7 +3,7 @@ import { DownOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, Input } from 'antd';
 import { useEffect, useState } from 'react';
 
-import { getMerchants } from '@/features/merchants';
+import { getMerchants } from '@/features/merchants/merchantsSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { useNavigate } from 'react-router-dom';
 import HomeBody from '../../components/Home/body';

@@ -1,59 +1,12 @@
 import { useEffect, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
-import usePlacesAutocomplete, {
-  getGeocode,
-  getLatLng,
-} from "use-places-autocomplete";
-declare let google: any; // Declare google as any to avoid TypeScript errors
+import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { getAddressFromLatLng, setLocation, updateAddress } from "@/features/location/locationSlice";
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
-interface Window {
-  google?: any;
-}
-
-const GOOGLE_API_KEY = "AIzaSyCYS5qMlBLhQ4cIYaTcR0Hxpo1g8ki5Cpw";
-
-// Step 1: Wrapper that loads script and then renders the input
-const AddressSearchLoader = ({
-  location: {
-    lat = 41.2995,
-    lng = 69.2401,
-  } = {}
-}: {
-  location?: { lat?: number; lng?: number };
-}) => {
-  const [geocoder, setGeocoder] = useState<any | null>(null);
-  const [value, setValue] = useState("");
+const AddressSearchLoader = () => {
   const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    // Get location name
-    console.log("📍 Getting location name for:", { lat, lng });
-    if (!lat || !lng) {
-      console.warn("❗ No location provided, using default coordinates");
-      return;
-    }
-
-    if (!window['google']) {
-      console.error("❌ Google Maps API not loaded");
-      return;
-    }
-
-    const geocoder = new google.maps.Geocoder();
-    const latLng = { lat: 41.3275, lng: 69.2817 }; // Replace with your coordinates
-  
-    geocoder.geocode({ location: latLng }, (results: { formatted_address: any; }[], status: string) => {
-      if (status === "OK") {
-        if (results[0]) {
-          console.log("Formatted address:", results[0].formatted_address);
-          setValue(results[0].formatted_address);
-        } else {
-          console.warn("No results found");
-        }
-      } else {
-        console.error("Geocoder failed due to: " + status);
-      }
-    });
-  }, [lat, lng]);
 
   useEffect(() => {
     const loader = new Loader({
@@ -74,16 +27,14 @@ const AddressSearchLoader = ({
       });
   }, []);
 
-  return ready ? <AddressSearch value={value} /> : <p>⏳ Loading Google Maps…</p>;
+  return ready ? <AddressSearch /> : <p>⏳ Loading Google Maps…</p>;
 };
 
-// Step 2: Actual address input component (mounted only after script is ready)
-const AddressSearch = ({
-  value = "",
-}: {
-  value?: string;
-}) => {
+const AddressSearch = () => {
+  const dispatch = useAppDispatch();
+  const { address } = useAppSelector((state) => state.location);
   const {
+    value,
     ready,
     suggestions: { status, data },
     setValue,
@@ -92,28 +43,37 @@ const AddressSearch = ({
     requestOptions: { componentRestrictions: { country: "uz" } },
     debounce: 300,
   });
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleSelect = async (address: string) => {
     try {
-      setValue(address, false);
       clearSuggestions();
 
       const results = await getGeocode({ address });
       const { lat, lng } = await getLatLng(results[0]);
-
-      console.log("📍 Selected Location:", { lat, lng });
+      dispatch(setLocation({ lat, lng, address }));
     } catch (err) {
-      console.error("❌ Geocoding failed:", err);
+      console.error("Error fetching address:", err);
     }
   };
+
+  useEffect(() => {
+    setValue("");
+  }, [address, setValue]);
 
   return (
     <div>
       <input
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        onFocus={() => {
+          setIsFocused(true);
+          setValue(address || "")
+        }}
         disabled={!ready}
-        placeholder="Manzilni qidirish"
+        placeholder={
+          isFocused ? "Search for an address..." : address || "Search for a location..."
+        }
       />
       {status === "OK" && (
         <ul style={{ padding: "0.5rem", border: "1px solid #ccc" }}>
@@ -121,7 +81,6 @@ const AddressSearch = ({
             <li
               key={place_id}
               onClick={() => handleSelect(description)}
-              style={{ cursor: "pointer", margin: "0.25rem 0" }}
             >
               {description}
             </li>
