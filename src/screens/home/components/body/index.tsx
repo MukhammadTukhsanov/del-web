@@ -1,8 +1,11 @@
+import { useAppSelector } from '@/hooks';
 import HeaderMenu from './header-menu/header-menu';
-import HorixontalMenu from './horizontal-menu';
-import VerticalMenuItem from './vertical-list-item.tsx';
+// import HorixontalMenu from './horizontal-menu';
+import MerchantCard from './merchant-card';
 
 export default function HomeBody() {
+  const merchants = useAppSelector((state) => state.merchants.merchants);
+
   return (
     <div className='body'>
       <svg
@@ -21,12 +24,14 @@ export default function HomeBody() {
         />
       </svg>
       <HeaderMenu />
-      <HorixontalMenu />
-      <VerticalMenuItem />
-      <VerticalMenuItem />
-      <VerticalMenuItem />
-      <VerticalMenuItem />
-      <VerticalMenuItem />
+      {/* <HorixontalMenu /> */}
+      {
+        merchants.map((merchant, index) => <MerchantCard key={index} merchant={merchant} />)
+      }
+      {/* <MerchantCard />
+      <MerchantCard />
+      <MerchantCard />
+      <MerchantCard /> */}
     </div>
   );
 }

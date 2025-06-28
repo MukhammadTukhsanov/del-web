@@ -1,14 +1,14 @@
-import { useEffect } from 'react';
+import { JSX, useEffect, useMemo } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 
 import ConfirmOTP from './auth/confirm-otp';
 import Login from './auth/login';
+
 import Layout from './components/Layout';
 import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner';
 
 import { getCurrentUser, refreshToken } from './features/auth/userSlice';
-import ProtectedRoute from './features/protectedRoute';
 import { useAppDispatch, useAppSelector } from './hooks';
 
 import LocationSelectorMap from './components/LocationSelectorMap/LocationSelectorMap';
@@ -26,27 +26,33 @@ function App() {
   );
 }
 
+function ProtectedRoute({ children }: { children: JSX.Element }) {
+  const { token: userToken } = useAppSelector((state) => state.user);
+  const { token: otpToken } = useAppSelector((state) => state.otp);
+
+  const isAuthenticated = Boolean(userToken || otpToken);
+
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
+}
+
 function AppRoutes() {
   const dispatch = useAppDispatch();
 
-  const { token: userToken, loading } = useAppSelector((state) => state.user);
+  const { token: userToken, initialized } = useAppSelector((state) => state.user);
   const { token: otpToken } = useAppSelector((state) => state.otp);
-
   const token = userToken || otpToken;
 
-  // Refresh token on app load
   useEffect(() => {
     dispatch(refreshToken());
   }, [dispatch]);
 
-  // Load user info if token exists
   useEffect(() => {
-    if (token) {
+    if (token && initialized) {
       dispatch(getCurrentUser());
     }
-  }, [token, dispatch]);
+  }, [token, initialized, dispatch]);
 
-  if (loading) {
+  if (!initialized) {
     return <LoadingSpinner />;
   }
 

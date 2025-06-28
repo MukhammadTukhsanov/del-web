@@ -41,6 +41,7 @@ const userSlice = createSlice({
     user: null as any,
     token: localStorage.getItem('auth_token') || null,
     loading: false,
+    initialized: false,
     error: null as string | null,
   },
   reducers: {
@@ -62,6 +63,7 @@ const userSlice = createSlice({
         state.token = action.payload.token;
         localStorage.setItem('auth_token', action.payload.token);
         state.error = null;
+        state.initialized = true;
       })
       .addCase(refreshToken.rejected, (state, action) => {
         state.loading = false;
