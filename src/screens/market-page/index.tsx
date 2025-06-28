@@ -8,12 +8,13 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
+import { MarketTypesFoodCategories } from '@/constants/MarketType';
 import './market-page.css';
 
 const MarketPage = () => {
   let params = useParams();
   const marketId = params.mid;
-  const [activeCategory, setActiveCategory] = useState('Toza mevalar');
+  const [activeCategory, setActiveCategory] = useState('all');
   const [scrolled, setScrolled] = useState(false);
 
   const dispatch = useAppDispatch();
@@ -57,21 +58,6 @@ const MarketPage = () => {
     // dispatch(getMerchantInformation(marketId));
     dispatch(getMerchantProducts(marketId));
   }, [dispatch, marketId]);
-
-  const categories = [
-    {
-      name: 'Toza mevalar',
-    },
-    {
-      name: 'Sabzavotlar',
-    },
-    {
-      name: 'Sut mahsulotlari',
-    },
-    {
-      name: 'Non mahsulotlari',
-    },
-  ];
 
   const getCartItemCount = (itemId: string) => {
     const cartItem = cartItems.find((item) => item.id === itemId);
@@ -135,11 +121,6 @@ const MarketPage = () => {
           className='market-header-photo'
           style={{ backgroundImage: `url('${merchant.photo}')` }}
         ></div>
-        {/* <img
-          src={merchantInformation.photo || '/placeholder-image.jpg'}
-          alt={merchantInformation.businessName}
-          className='market-image'
-        /> */}
         <div className='image-overlay'></div>
         <button onClick={() => navigate(-1)} className='market-back'>
           <ArrowLeftOutlined />
@@ -180,21 +161,24 @@ const MarketPage = () => {
       {/* Category Tabs */}
       <div className={`category-tabs ${scrolled ? 'scrolled' : ''}`}>
         <div className='tabs-container'>
-          {categories.map((category) => (
-            <button
-              key={category.name}
-              onClick={() => setActiveCategory(category.name)}
-              className={`category-tab ${activeCategory === category.name ? 'active' : 'inactive'}`}
-            >
-              {category.name}
-            </button>
-          ))}
+          {merchant.merchantType === 'food' &&
+            MarketTypesFoodCategories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => setActiveCategory(category.id)}
+                className={`category-tab ${activeCategory === category.id ? 'active' : 'inactive'}`}
+              >
+                {category.text}
+              </button>
+            ))}
         </div>
       </div>
 
       {/* Products Grid */}
       <div className='products-section'>
-        <h2 className='section-title'>{activeCategory}</h2>
+        <h2 className='section-title'>
+          {MarketTypesFoodCategories.find((item) => item.id === activeCategory)?.text}
+        </h2>
         <div className='products-grid'>
           {products?.map((item, index) => {
             const cartCount = getCartItemCount(item.id);

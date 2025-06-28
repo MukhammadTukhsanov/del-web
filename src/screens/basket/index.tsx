@@ -1,6 +1,8 @@
+import Button from '@/components/Button/Button';
 import GridMenuItems from '@/components/GridMenuItems';
 import { RootState } from '@/store';
 import { ArrowLeftOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Image } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -14,14 +16,6 @@ interface TopNavBarProps {
 
 export default function Basket({ title = 'Savat', onTrashClick }: TopNavBarProps) {
   const [showFixedNavbar, setShowFixedNavbar] = useState(false);
-
-  // Mock data - replace with your actual state/props
-  const [basketData, setBasketData] = useState({
-    itemCount: 3,
-    totalPrice: 89000,
-    deliveryPrice: 0, // Set to 0 for free delivery, or any number for paid delivery
-    currency: "so'm",
-  });
 
   const [comment, setComment] = useState('');
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
@@ -54,19 +48,6 @@ export default function Basket({ title = 'Savat', onTrashClick }: TopNavBarProps
     return price.toLocaleString('uz-UZ');
   };
 
-  const isDeliveryFree = basketData.deliveryPrice === 0;
-  const finalTotal = basketData.totalPrice + basketData.deliveryPrice;
-
-  const handleCheckout = () => {
-    // Handle checkout logic here
-    const orderData = {
-      items: basketData,
-      comment: comment.trim(),
-      total: finalTotal,
-    };
-    console.log('Proceeding to checkout with:', orderData);
-  };
-
   const openCommentModal = () => {
     setTempComment(comment);
     setIsCommentModalOpen(true);
@@ -92,11 +73,13 @@ export default function Basket({ title = 'Savat', onTrashClick }: TopNavBarProps
         </button>
         <div className='center-text'>
           <h6 className='nav-title m-0'>Savat</h6>
-          <p className='nav-subtitle m-0'>Bellisimo Pizza · 35-40 min</p>
+          {!!cartItems.length && <p className='nav-subtitle m-0'>Bellisimo Pizza · 35-40 min</p>}
         </div>
-        <button className='nav-icon trash' onClick={onTrashClick} aria-label='Delete'>
-          <DeleteOutlined style={{ fontSize: 20, color: '#ff9556' }} />
-        </button>
+        {!!cartItems.length && (
+          <button className='nav-icon trash' onClick={onTrashClick} aria-label='Delete'>
+            <DeleteOutlined style={{ fontSize: 20, color: '#ff9556' }} />
+          </button>
+        )}
       </div>
 
       {/* Fixed top navbar on scroll */}
@@ -109,6 +92,7 @@ export default function Basket({ title = 'Savat', onTrashClick }: TopNavBarProps
             <h6 className='nav-title m-0'>Savat</h6>
             <p className='nav-subtitle m-0'>Bellisimo Pizza · 35-40 min</p>
           </div>
+
           <button className='nav-icon trash' onClick={onTrashClick} aria-label='Delete'>
             <DeleteOutlined style={{ fontSize: 20 }} />
           </button>
@@ -129,68 +113,76 @@ export default function Basket({ title = 'Savat', onTrashClick }: TopNavBarProps
         ))}
       </div>
 
-      {/* Comment Button */}
-      <div className='comment-button-section'>
-        <button className='comment-button' onClick={openCommentModal}>
-          <div className='comment-button-content'>
-            <span className='comment-icon'>💬</span>
-            <div className='comment-text'>
-              <span className='comment-title'>Restoranga izoh</span>
-              {comment && (
-                <span className='comment-preview'>
-                  {comment.length > 30 ? `${comment.substring(0, 30)}...` : comment}
-                </span>
-              )}
-            </div>
-          </div>
-          <span className='comment-arrow'>›</span>
-        </button>
-      </div>
+      {!cartItems.length && (
+        <div className='empty'>
+          <Image src={require('@/assets/images/empty-cart.svg')} />
+          <h4>Bu yer bo'sh</h4>
+          <p>Bu yerda siz buyurtma berish uchun qo'shgan mahsulotlaringiz ko'rinadi</p>
+          <Button title="Mahsulotlarga o'tish" onClick={() => navigate('/')} />
+        </div>
+      )}
 
       {/* Extra space for scrolling to account for sticky bottom bar */}
-      <div className='separate-title'>
-        <h4>Hech narsani unutmadingizmi ?</h4>
-      </div>
-
-      <GridMenuItems />
-
-      <div style={{ height: '36px' }}></div>
-
-      {/* Enhanced Sticky Bottom Bar */}
-      <div className='sticky-bottom-bar'>
-        <div className='delivery-info'>
-          <div className='delivery-row'>
-            <span className='delivery-label'>Yetkazish:</span>
-            <span className={`delivery-price ${isDeliveryFree ? 'free' : ''}`}>
-              {isDeliveryFree
-                ? 'Bepul'
-                : `${formatPrice(basketData.deliveryPrice)} ${basketData.currency}`}
-            </span>
-          </div>
-          {!isDeliveryFree && (
-            <div className='delivery-note'>
-              <span>Minimal buyurtma miqdori: 25,000 so'm</span>
-            </div>
-          )}
-        </div>
-
-        <button className='checkout-button' onClick={handleCheckout}>
-          <div className='checkout-content'>
-            <div className='checkout-left'>
-              <span className='item-count'>{cartItems.length} ta mahsulot</span>
-              <span className='checkout-title'>Buyurtma berish</span>
-            </div>
-            <div className='checkout-right'>
-              <span className='total-price'>
-                {formatPrice(totalPrice)} {basketData.currency}
-              </span>
-              <div className='checkout-arrow'>
-                <ArrowLeftOutlined style={{ fontSize: 16, transform: 'rotate(180deg)' }} />
+      {!!cartItems.length && (
+        <>
+          <div className='comment-button-section'>
+            <button className='comment-button' onClick={openCommentModal}>
+              <div className='comment-button-content'>
+                <span className='comment-icon'>💬</span>
+                <div className='comment-text'>
+                  <span className='comment-title'>Restoranga izoh</span>
+                  {comment && (
+                    <span className='comment-preview'>
+                      {comment.length > 30 ? `${comment.substring(0, 30)}...` : comment}
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
+              <span className='comment-arrow'>›</span>
+            </button>
           </div>
-        </button>
-      </div>
+          <div className='separate-title'>
+            <h4>Hech narsani unutmadingizmi ?</h4>
+          </div>
+
+          <GridMenuItems />
+          <div style={{ height: '36px' }}></div>
+          <div className='sticky-bottom-bar'>
+            <div className='delivery-info'>
+              {/* <div className='delivery-row'>
+                <span className='delivery-label'>Yetkazish:</span>
+                <span className={`delivery-price ${isDeliveryFree ? 'free' : ''}`}>
+                  {isDeliveryFree
+                    ? 'Bepul'
+                    : `${formatPrice(basketData.deliveryPrice)} ${basketData.currency}`}
+                </span>
+              </div>
+              {!isDeliveryFree && (
+                <div className='delivery-note'>
+                  <span>Minimal buyurtma miqdori: 25,000 so'm</span>
+                </div>
+              )} */}
+            </div>
+
+            <button className='checkout-button'>
+              <div className='checkout-content'>
+                <div className='checkout-left'>
+                  <span className='item-count'>{cartItems.length} ta mahsulot</span>
+                  <span className='checkout-title'>Buyurtma berish</span>
+                </div>
+                <div className='checkout-right'>
+                  <span className='total-price'>
+                    {/* {formatPrice(totalPrice)} {basketData.currency} */}
+                  </span>
+                  <div className='checkout-arrow'>
+                    <ArrowLeftOutlined style={{ fontSize: 16, transform: 'rotate(180deg)' }} />
+                  </div>
+                </div>
+              </div>
+            </button>
+          </div>
+        </>
+      )}
 
       {/* Comment Bottom Sheet Modal */}
       {isCommentModalOpen && (
