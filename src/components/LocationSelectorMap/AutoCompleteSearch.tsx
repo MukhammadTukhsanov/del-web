@@ -8,26 +8,26 @@ const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 const AddressSearchLoader = () => {
   const [ready, setReady] = useState(false);
 
-  useEffect(() => {
-    const loader = new Loader({
-      apiKey: GOOGLE_API_KEY,
-      libraries: ["places"],
-    });
+  // useEffect(() => {
+  //   const loader = new Loader({
+  //     apiKey: GOOGLE_API_KEY,
+  //     libraries: ["places"],
+  //   });
 
-    loader
-      .load()
-      .then(() => {
-        console.log("✅ Google Maps script loaded");
+  //   loader
+  //     .load()
+  //     .then(() => {
+  //       console.log("✅ Google Maps script loaded");
 
-        console.log('window.google', window);
-        setReady(true);
-      })
-      .catch((e) => {
-        console.error("❌ Failed to load Google Maps", e);
-      });
-  }, []);
+  //       console.log('window.google', window);
+  //       setReady(true);
+  //     })
+  //     .catch((e) => {
+  //       console.error("❌ Failed to load Google Maps", e);
+  //     });
+  // }, []);
 
-  return ready ? <AddressSearch /> : <p>⏳ Loading Google Maps…</p>;
+  return <AddressSearch />;
 };
 
 const AddressSearch = () => {
@@ -59,6 +59,7 @@ const AddressSearch = () => {
 
   useEffect(() => {
     setValue("");
+    setIsFocused(false);
   }, [address, setValue]);
 
   return (

@@ -66,6 +66,10 @@
   box-shadow: 0 2px 4px rgba(255, 149, 86, 0.3);
   z-index: 999;
 }
+.map-bottom-controller:disabled {
+  background-color: #ff9556a0;
+  cursor: not-allowed;
+}
 
 .map-header {
   display: flex;

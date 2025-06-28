@@ -62,7 +62,7 @@ export default function Home() {
               <div className='location-address'>
                 <i className='bi bi-geo-alt-fill'></i>
                 <h6 className='m-0'>
-                  {currentLocation ? currentLocation?.addressName : 'Manzilni tanlang'}
+                  {user?.location?.address ? user?.location?.address : 'Manzilni tanlang'}
                 </h6>
                 <DownOutlined />
               </div>

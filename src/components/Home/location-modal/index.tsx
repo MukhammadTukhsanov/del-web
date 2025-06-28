@@ -11,7 +11,7 @@ interface LocationModalProps {
 }
 
 interface Location {
-  title?: string;
+  address?: string;
   lat?: number;
   lng?: number;
 }
@@ -25,11 +25,6 @@ const LocationModal: React.FC<LocationModalProps> = ({ onSelectLocation }) => {
   const handleLocationSelect = (location: any) => {
     onSelectLocation(location.name);
   };
-
-  useEffect(() => {
-    console.log('location: ', location);
-    console.log('locations: ', locations);
-  }, []);
 
   const getLocationIcon = (type: string) => {
     switch (type) {
@@ -62,7 +57,7 @@ const LocationModal: React.FC<LocationModalProps> = ({ onSelectLocation }) => {
           >
             {getLocationIcon('current')}
             <Text style={{ marginLeft: '8px', fontSize: '14px' }}>
-              {location?.addressName || 'Manzil tanlanmagan'}
+              {location?.address || 'Manzil tanlanmagan'}
             </Text>
             <span style={{ marginLeft: 'auto', color: '#8c8c8c', fontSize: '12px' }}>
               {location?.lat && location.lng
@@ -98,7 +93,7 @@ const LocationModal: React.FC<LocationModalProps> = ({ onSelectLocation }) => {
                     avatar={getLocationIcon('recent')}
                     title={
                       <Text strong style={{ fontSize: '14px' }}>
-                        {item?.title}
+                        {item?.address}
                       </Text>
                     }
                     description={
