@@ -20,11 +20,13 @@
   text-overflow: ellipsis;
   align-items: center;
   white-space: nowrap;
-  overflow: hidden;
+  overflow: visible; /* Changed from hidden to show badge */
   transition: color 0.3s;
   text-decoration: none;
   color: #95919f;
+  position: relative;
 }
+
 .nav-link-icon {
   font-size: 24px;
 }
@@ -33,9 +35,68 @@
   color: var(--color-primary);
 }
 
+/* Basket icon container for positioning badge */
+.basket-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Cart badge styles */
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background: #ef4444;
+  color: white;
+  border-radius: 12px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  border: 2px solid #f0f0f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: pulse 2s infinite;
+}
+
+.nav-link.active .cart-badge {
+  background: var(--color-primary);
+  border-color: #f0f0f0;
+}
+
+.nav-link:not(.active) .cart-badge {
+  background: #ef4444;
+}
+
+@media (max-width: 480px) {
+  .cart-badge {
+    top: -6px;
+    right: -10px;
+    font-size: 9px;
+    min-width: 16px;
+    height: 16px;
+    padding: 1px 4px;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   .bottom-nav {
     border-top: 1px solid #0f172a;
     background: #1e293b;
+  }
+
+  .cart-badge {
+    border-color: #1e293b;
+  }
+
+  .nav-link.active .cart-badge {
+    background: var(--color-primary);
+    border-color: #1e293b;
   }
 }

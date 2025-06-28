@@ -1,10 +1,18 @@
+import { addToCart, removeFromCart } from '@/features/cart/cartSlice';
+import { RootState } from '@/store';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 const MarketPage = () => {
   const [activeCategory, setActiveCategory] = useState('Toza mevalar');
   const [scrolled, setScrolled] = useState(false);
+
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,30 +31,32 @@ const MarketPage = () => {
     location: 'Shahar markazi',
   };
 
-  const navigate = useNavigate();
-
   const categories = [
     {
       name: 'Toza mevalar',
       items: [
         {
+          id: 'apple-organic',
           name: 'Organik olma',
           price: "25,000 so'm/kg",
           image: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=150&h=150&fit=crop',
         },
         {
+          id: 'banana-fresh',
           name: 'Yangi banan',
           price: "18,000 so'm/kg",
           image:
             'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=150&h=150&fit=crop',
         },
         {
+          id: 'strawberry-box',
           name: 'Qulupnay',
           price: "35,000 so'm/quti",
           image:
             'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=150&h=150&fit=crop',
         },
         {
+          id: 'orange-bag',
           name: "Apelsin to'plami",
           price: "28,000 so'm/xalta",
           image: 'https://images.unsplash.com/photo-1547514701-42782101795e?w=150&h=150&fit=crop',
@@ -57,23 +67,27 @@ const MarketPage = () => {
       name: 'Sabzavotlar',
       items: [
         {
+          id: 'tomato-fresh',
           name: 'Yangi pomidor',
           price: "12,000 so'm/kg",
           image:
             'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=150&h=150&fit=crop',
         },
         {
+          id: 'lettuce-green',
           name: 'Yashil salat',
           price: "8,000 so'm/dona",
           image:
             'https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?w=150&h=150&fit=crop',
         },
         {
+          id: 'pepper-colorful',
           name: 'Rang-barang qalampir',
           price: "22,000 so'm/kg",
           image: 'https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=150&h=150&fit=crop',
         },
         {
+          id: 'carrot-bunch',
           name: 'Sabzi',
           price: "10,000 so'm/bog'lam",
           image:
@@ -85,23 +99,27 @@ const MarketPage = () => {
       name: 'Sut mahsulotlari',
       items: [
         {
+          id: 'milk-organic',
           name: 'Organik sut',
           price: "18,000 so'm/litr",
           image: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=150&h=150&fit=crop',
         },
         {
+          id: 'eggs-dozen',
           name: 'Tuxum',
           price: "22,000 so'm/o'nlik",
           image:
             'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=150&h=150&fit=crop',
         },
         {
+          id: 'yogurt-greek',
           name: 'Yunoncha yogurt',
           price: "25,000 so'm/paket",
           image:
             'https://images.unsplash.com/photo-1571212515416-fca0b8b3e3e8?w=150&h=150&fit=crop',
         },
         {
+          id: 'cheese-block',
           name: 'Pishloq',
           price: "45,000 so'm/blok",
           image:
@@ -113,22 +131,26 @@ const MarketPage = () => {
       name: 'Non mahsulotlari',
       items: [
         {
+          id: 'bread-fresh',
           name: 'Yangi non',
           price: "5,000 so'm/dona",
           image:
             'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150&h=150&fit=crop',
         },
         {
+          id: 'croissant-pack',
           name: 'Kruassan',
           price: "12,000 so'm/paket",
           image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=150&h=150&fit=crop',
         },
         {
+          id: 'bagel-pack',
           name: 'Bagel',
           price: "8,000 so'm/paket",
           image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=150&h=150&fit=crop',
         },
         {
+          id: 'muffin-box',
           name: 'Keks',
           price: "15,000 so'm/quti",
           image:
@@ -139,6 +161,27 @@ const MarketPage = () => {
   ];
 
   const currentCategory = categories.find((cat) => cat.name === activeCategory);
+
+  const getCartItemCount = (itemId: string) => {
+    const cartItem = cartItems.find((item) => item.id === itemId);
+    return cartItem ? cartItem.count : 0;
+  };
+
+  const handleAddToCart = (item: any) => {
+    dispatch(
+      addToCart({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        image: item.image,
+        category: activeCategory,
+      }),
+    );
+  };
+
+  const handleRemoveFromCart = (itemId: string) => {
+    dispatch(removeFromCart(itemId));
+  };
 
   return (
     <div className='market-page'>
@@ -430,18 +473,37 @@ const MarketPage = () => {
       <div className='products-section'>
         <h2 className='section-title'>{activeCategory}</h2>
         <div className='products-grid'>
-          {currentCategory?.items.map((item, index) => (
-            <div key={index} className='product-card'>
-              <div className='product-image-container'>
-                <img src={item.image} alt={item.name} className='product-image' />
+          {currentCategory?.items.map((item, index) => {
+            const cartCount = getCartItemCount(item.id);
+
+            return (
+              <div key={index} className='product-card'>
+                <div className='product-image-container'>
+                  <img src={item.image} alt={item.name} className='product-image' />
+                </div>
+                <div className='product-info'>
+                  <h3 className='product-name'>{item.name}</h3>
+                  <p className='product-price'>{item.price}</p>
+
+                  {cartCount === 0 ? (
+                    <button className='add-to-cart-btn' onClick={() => handleAddToCart(item)}>
+                      Savatga qo'shish
+                    </button>
+                  ) : (
+                    <div className='cart-controls'>
+                      <button className='cart-btn' onClick={() => handleRemoveFromCart(item.id)}>
+                        −
+                      </button>
+                      <span className='cart-count'>{cartCount}</span>
+                      <button className='cart-btn' onClick={() => handleAddToCart(item)}>
+                        +
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className='product-info'>
-                <h3 className='product-name'>{item.name}</h3>
-                <p className='product-price'>{item.price}</p>
-                <button className='add-to-cart-btn'>Savatga qo'shish</button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

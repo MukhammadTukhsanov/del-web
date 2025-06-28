@@ -1,6 +1,8 @@
 import GridMenuItems from '@/components/GridMenuItems';
+import { RootState } from '@/store';
 import { ArrowLeftOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import BasketItem from './basket-item';
 import './style.css';
@@ -11,7 +13,6 @@ interface TopNavBarProps {
 }
 
 export default function Basket({ title = 'Savat', onTrashClick }: TopNavBarProps) {
-  const navigate = useNavigate();
   const [showFixedNavbar, setShowFixedNavbar] = useState(false);
 
   // Mock data - replace with your actual state/props
@@ -25,6 +26,21 @@ export default function Basket({ title = 'Savat', onTrashClick }: TopNavBarProps
   const [comment, setComment] = useState('');
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [tempComment, setTempComment] = useState('');
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const {
+    items: cartItems,
+    totalItems,
+    totalPrice,
+  } = useSelector((state: RootState) => state.cart);
+
+  useEffect(() => {
+    console.log('cartItems: ', cartItems);
+    console.log('totalItems: ', totalItems);
+    console.log('totalPrice: ', totalPrice);
+  }, [cartItems, totalItems, totalPrice]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -100,8 +116,16 @@ export default function Basket({ title = 'Savat', onTrashClick }: TopNavBarProps
       </div>
 
       <div className='basket-items'>
-        {[...Array(8)].map((_, i) => (
-          <BasketItem key={i} />
+        {cartItems.map((_, i) => (
+          <BasketItem
+            category={_.category}
+            count={_.count}
+            id={_.id}
+            image={_.image}
+            name={_.name}
+            price={_.price}
+            key={i}
+          />
         ))}
       </div>
 
@@ -153,12 +177,12 @@ export default function Basket({ title = 'Savat', onTrashClick }: TopNavBarProps
         <button className='checkout-button' onClick={handleCheckout}>
           <div className='checkout-content'>
             <div className='checkout-left'>
-              <span className='item-count'>{basketData.itemCount} ta mahsulot</span>
+              <span className='item-count'>{cartItems.length} ta mahsulot</span>
               <span className='checkout-title'>Buyurtma berish</span>
             </div>
             <div className='checkout-right'>
               <span className='total-price'>
-                {formatPrice(finalTotal)} {basketData.currency}
+                {formatPrice(totalPrice)} {basketData.currency}
               </span>
               <div className='checkout-arrow'>
                 <ArrowLeftOutlined style={{ fontSize: 16, transform: 'rotate(180deg)' }} />
