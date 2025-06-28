@@ -1,4 +1,4 @@
-import { getMerchantsService } from '@/services/merchant.services';
+import { getMerchantsService, getMerchantProductsService } from '@/services/merchant.services';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export const getMerchants = createAsyncThunk('merchants/list', async () => {
@@ -9,11 +9,24 @@ export const getMerchants = createAsyncThunk('merchants/list', async () => {
     throw new Error('Refresh token failed');
   }
 });
+
+export const getMerchantProducts = createAsyncThunk(
+  'merchants/products',
+  async (merchantId: string) => {
+    try {
+      const response = await getMerchantProductsService(merchantId);
+      return response;
+    } catch (error) {
+      throw new Error('Failed to fetch merchant products');
+    }
+  }
+);
   
 const merchantsSlice = createSlice({
   name: 'merchants',
   initialState: {
     merchants: [] as any[],
+    products: [] as any[],
     loading: false,
     error: null as string | null,
   },
@@ -40,6 +53,28 @@ const merchantsSlice = createSlice({
         (state, action) => {
           state.loading = false;
           state.error = action.error.message || 'Failed to fetch merchants';
+        }
+      )
+      .addCase(
+        getMerchantProducts.pending,
+        (state) => {
+          state.loading = true;
+          state.error = null;
+          state.products = [];
+        }
+      )
+      .addCase(
+        getMerchantProducts.fulfilled,
+        (state, action) => {
+          state.loading = false;
+          state.products = action.payload;
+        }
+      )
+      .addCase(
+        getMerchantProducts.rejected,
+        (state, action) => {
+          state.loading = false;
+          state.error = action.error.message || 'Failed to fetch merchant products';
         }
       );
   },

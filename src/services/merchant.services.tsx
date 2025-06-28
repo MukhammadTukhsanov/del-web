@@ -10,3 +10,12 @@ export async function getMerchantsService() {
   }
 }
 
+export async function getMerchantProductsService(merchantId: string) {
+  try {
+    const response = await axiosInstance.get(`/merchants/${merchantId}/products`);
+    return response.data;
+  } catch (error) {
+    console.error('Get merchant products error:', error);
+    throw error;
+  }
+}

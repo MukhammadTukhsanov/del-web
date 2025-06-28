@@ -73,7 +73,7 @@ function AppRoutes() {
         <Route path="basket" element={<Basket />} />
         <Route path="orders" element={<Orders />} />
         <Route path="profile" element={<Profile />} />
-        <Route path="market" element={<MarketPage />} />
+        <Route path="market/:mid" element={<MarketPage />} />
         <Route path="location" element={<LocationSelectorMap />} />
       </Route>
 

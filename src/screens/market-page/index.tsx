@@ -1,15 +1,20 @@
 import { addToCart, removeFromCart } from '@/features/cart/cartSlice';
+import { getMerchantProducts } from '@/features/merchants';
+import { useAppDispatch } from '@/hooks';
 import { RootState } from '@/store';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const MarketPage = () => {
+  let params = useParams();
+  const marketId = params.mid;
   const [activeCategory, setActiveCategory] = useState('Toza mevalar');
   const [scrolled, setScrolled] = useState(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const products = useSelector((state: RootState) => state.merchants.products);
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
   const navigate = useNavigate();
@@ -21,6 +26,14 @@ const MarketPage = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (!marketId) {
+      return;
+    }
+    
+    dispatch(getMerchantProducts(marketId));
+  }, [dispatch, marketId]);
 
   const marketData = {
     name: 'Yangi Bozor',
@@ -473,13 +486,13 @@ const MarketPage = () => {
       <div className='products-section'>
         <h2 className='section-title'>{activeCategory}</h2>
         <div className='products-grid'>
-          {currentCategory?.items.map((item, index) => {
+          {products?.map((item, index) => {
             const cartCount = getCartItemCount(item.id);
 
             return (
               <div key={index} className='product-card'>
                 <div className='product-image-container'>
-                  <img src={item.image} alt={item.name} className='product-image' />
+                  <img src={item.photo} alt={item.name} className='product-image' />
                 </div>
                 <div className='product-info'>
                   <h3 className='product-name'>{item.name}</h3>
