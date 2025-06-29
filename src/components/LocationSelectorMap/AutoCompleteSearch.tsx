@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
-import { Loader } from "@googlemaps/js-api-loader";
-import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
-import { useAppDispatch, useAppSelector } from "@/hooks";
-import { getAddressFromLatLng, setLocation, updateAddress } from "@/features/location/locationSlice";
+import { setLocation } from '@/features/location/locationSlice';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useEffect, useState } from 'react';
+import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete';
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
 const AddressSearchLoader = () => {
@@ -40,7 +39,7 @@ const AddressSearch = () => {
     setValue,
     clearSuggestions,
   } = usePlacesAutocomplete({
-    requestOptions: { componentRestrictions: { country: "uz" } },
+    requestOptions: { componentRestrictions: { country: 'uz' } },
     debounce: 300,
   });
   const [isFocused, setIsFocused] = useState(false);
@@ -53,36 +52,31 @@ const AddressSearch = () => {
       const { lat, lng } = await getLatLng(results[0]);
       dispatch(setLocation({ lat, lng, address }));
     } catch (err) {
-      console.error("Error fetching address:", err);
+      console.error('Error fetching address:', err);
     }
   };
 
   useEffect(() => {
-    setValue("");
+    setValue('');
     setIsFocused(false);
   }, [address, setValue]);
 
   return (
-    <div>
+    <div style={{ height: '100%' }}>
       <input
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onFocus={() => {
           setIsFocused(true);
-          setValue(address || "")
+          setValue(address || '');
         }}
         disabled={!ready}
-        placeholder={
-          isFocused ? "Search for an address..." : address || "Search for a location..."
-        }
+        placeholder={isFocused ? 'Search for an address...' : address || 'Search for a location...'}
       />
-      {status === "OK" && (
-        <ul style={{ padding: "0.5rem", border: "1px solid #ccc" }}>
+      {status === 'OK' && (
+        <ul style={{ padding: '0.5rem', border: '1px solid #ccc' }}>
           {data.map(({ place_id, description }) => (
-            <li
-              key={place_id}
-              onClick={() => handleSelect(description)}
-            >
+            <li key={place_id} onClick={() => handleSelect(description)}>
               {description}
             </li>
           ))}

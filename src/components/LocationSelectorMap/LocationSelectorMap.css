@@ -17,6 +17,7 @@
   color: #3c486b90;
   width: 42px;
   height: 42px;
+  box-shadow: 0 2px 16px rgba(61, 72, 108, 0.2);
 }
 .map-container {
   height: 100vh;
@@ -55,15 +56,6 @@
   left: 24px;
   right: 24px;
   width: calc(100% - 48px);
-  padding: 16px 20px;
-  background-color: #ff9556;
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
-  box-shadow: 0 2px 4px rgba(255, 149, 86, 0.3);
   z-index: 999;
 }
 .map-bottom-controller:disabled {
@@ -78,19 +70,22 @@
   width: calc(100% - 48px);
   top: 24px;
   left: 24px;
-  gap: 16px;
+  gap: 8px;
 }
 
 .map-header-address {
   width: inherit;
 }
 .map-header-address input {
+  height: 100%;
   width: 100%;
   font-size: 16px;
   color: #3c486b;
   padding: 8px 16px;
-  border-radius: 12px;
+  border-radius: 30px;
+  border: 1px solid rgba(61, 72, 108, 0.376);
   background-color: #fff;
+  box-shadow: 0 2px 16px rgba(61, 72, 108, 0.2);
 }
 .map-header-address ul {
   background-color: #fff;

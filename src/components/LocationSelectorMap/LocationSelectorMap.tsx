@@ -1,13 +1,14 @@
+import { updateCurrentUser } from '@/features/auth/userSlice';
+import { getAddressFromLatLng } from '@/features/location/locationSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { AimOutlined, ArrowLeftOutlined, LoadingOutlined } from '@ant-design/icons';
+import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import mapboxgl from 'mapbox-gl';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import mapboxgl, { Map as MapboxMap } from 'mapbox-gl';
-import './LocationSelectorMap.css';
+import Button from '../Button/Button';
 import AddressSearch from './AutoCompleteSearch';
-import { getAddressFromLatLng, setLocation } from '@/features/location/locationSlice';
-import { updateCurrentUser } from '@/features/auth/userSlice';
-import { GoogleMap, LoadScript } from "@react-google-maps/api";
+import './LocationSelectorMap.css';
 mapboxgl.accessToken = process.env.MAPBOX_API;
 
 // Define the libraries array as a constant outside the component
@@ -18,7 +19,7 @@ const LocationSelectorMap = () => {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const mapRef = useRef<google.maps.Map | null>(null);
-  
+
   // const mapRef = useRef<MapboxMap | null>(null);
   // const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -88,9 +89,9 @@ const LocationSelectorMap = () => {
             address: address || '',
           },
         ]
-        .filter((loc) => !!loc)
-        .filter((loc) => loc.address && loc.lat && loc.lng) // Filter out empty locations
-        .slice(0, 3),
+          .filter((loc) => !!loc)
+          .filter((loc) => loc.address && loc.lat && loc.lng) // Filter out empty locations
+          .slice(0, 3),
       }),
     );
     navigate(-1);
@@ -111,14 +112,17 @@ const LocationSelectorMap = () => {
         setIsLoading(false);
       },
     );
-  }
+  };
 
   const handleBack = () => {
     navigate(-1);
   };
 
   return (
-    <LoadScript googleMapsApiKey={process.env.GOOGLE_API_KEY || ''} libraries={GOOGLE_MAP_LIBRARIES as any[]}>
+    <LoadScript
+      googleMapsApiKey={process.env.GOOGLE_API_KEY || ''}
+      libraries={GOOGLE_MAP_LIBRARIES as any[]}
+    >
       <div className='map-wrapper'>
         <div className='map-header'>
           <button onClick={handleBack} className='map-back-button'>
@@ -140,13 +144,13 @@ const LocationSelectorMap = () => {
             width: '100%',
           }}
           // center={{
-            // lat: 41.2995,
-            // lng: 69.2401,
-            // lng: selection?.lng || 69.2401, // Default to Tashkent if no selection
-            // lat: selection?.lat || 41.2995, // Default to Tashkent if no selection
+          // lat: 41.2995,
+          // lng: 69.2401,
+          // lng: selection?.lng || 69.2401, // Default to Tashkent if no selection
+          // lat: selection?.lat || 41.2995, // Default to Tashkent if no selection
           // }}
           zoom={18}
-          mapTypeId="satellite" // 👈 this enables satellite view
+          mapTypeId='satellite' // 👈 this enables satellite view
           // show labels
           options={{
             disableDefaultUI: true,
@@ -204,13 +208,12 @@ const LocationSelectorMap = () => {
           {isLoading ? <LoadingOutlined /> : <AimOutlined />}
         </button>
 
-        <button
+        <Button
           onClick={handleSelect}
           className='map-bottom-controller'
           disabled={!address || !lat || !lng}
-        >
-          Bu joylashuvni tanlash
-        </button>
+          title={'Bu joylashuvni tanlash'}
+        ></Button>
       </div>
     </LoadScript>
   );
