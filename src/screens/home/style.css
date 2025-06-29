@@ -12,7 +12,7 @@
   align-items: center;
   width: 100vw;
   box-sizing: border-box;
-  gap: 16;
+  gap: 16px;
 }
 
 .header-location {
