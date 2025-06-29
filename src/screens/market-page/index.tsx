@@ -275,7 +275,7 @@ const MarketPage = () => {
       {/* Bottom spacing for mobile */}
       <div className='bottom-spacing'></div>
 
-      <style jsx>{`
+      <style>{`
         .alert-overlay {
           position: fixed;
           top: 0;
