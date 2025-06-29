@@ -3,11 +3,12 @@ import PhoneInput from '@/components/PhoneInput/PhoneInput'; // Updated import
 import { otpSend } from '@/features/auth/otpSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import './auth.css';
 
 function Login() {
   const dispatch = useAppDispatch();
+  const userToken = useAppSelector((state) => state.user.token);
   const statePhone = useAppSelector((state) => state.otp.phone);
   const [phone, setPhone] = useState('');
   const [cleanPhone, setCleanPhone] = useState('');
@@ -62,6 +63,10 @@ function Login() {
       navigate('/confirmOTP');
     }
   }, [statePhone, navigate, isAnimating]);
+
+  if (userToken) {
+    return <Navigate to='/' replace />;
+  }
 
   return (
     <div className='auth-wrapper auth'>

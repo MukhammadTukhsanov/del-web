@@ -11,8 +11,10 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 function ConfirmOTP() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const userToken = useAppSelector((state) => state.user.token);
   const loading = useAppSelector((state) => state.otp.loading);
   const phone = useAppSelector((state) => state.otp.phone);
+  const otpToken = useAppSelector((state) => state.otp.token);
 
   const [otpValue, setOtpValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -129,6 +131,11 @@ function ConfirmOTP() {
   if (!phone) {
     return <Navigate to='/login' replace />;
   }
+
+  if (userToken || otpToken) {
+    return <Navigate to='/' replace />;
+  }
+
   return (
     <div className='auth-wrapper auth'>
       <img className='auth-logo' src={require('@/assets/icons/auth/logo-auth.png')} alt='yolda' />
