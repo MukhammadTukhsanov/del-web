@@ -1,7 +1,7 @@
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import './style.css';
 
-export default function BasketItem({
+export default function CartItem({
   category,
   count,
   id,
@@ -17,9 +17,9 @@ export default function BasketItem({
   price: string;
 }) {
   return (
-    <div className='basket-item'>
-      <img src={image} alt='Pizza' className='basket-item-image' />
-      <div className='basket-item-info'>
+    <div className='cart-item'>
+      <img src={image} alt='Pizza' className='cart-item-image' />
+      <div className='cart-item-info'>
         <div className='item-header'>
           <h5 className='item-title m-0'>{name}</h5>
           <h6 className='item-price m-0'>{price}</h6>
@@ -28,7 +28,7 @@ export default function BasketItem({
           This is a very long product description that should be cut off after two lines with an
           ellipsis if it exceeds the limit.
         </p> */}
-        <div className='basket-item-config'>
+        <div className='cart-item-config'>
           <button className='quantity-btn decrease' aria-label='Decrease quantity'>
             <MinusOutlined />
           </button>

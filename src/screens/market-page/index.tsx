@@ -1,5 +1,5 @@
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
-import { addToCart, removeFromCart } from '@/features/cart/cartSlice';
+import { addToCart, clearAndAddToCart, removeFromCart } from '@/features/cart/cartSlice';
 import { getMerchantProducts } from '@/features/merchants/merchantsSlice';
 import { useAppDispatch } from '@/hooks';
 import { RootState } from '@/store';
@@ -16,6 +16,8 @@ const MarketPage = () => {
   const marketId = params.mid;
   const [activeCategory, setActiveCategory] = useState('all');
   const [scrolled, setScrolled] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [pendingItem, setPendingItem] = useState<any>(null);
 
   const dispatch = useAppDispatch();
 
@@ -33,10 +35,12 @@ const MarketPage = () => {
     rate: rate,
   };
 
-  // const { products, merchantInformation, loading, error } = useSelector(
   const { products, loading, error } = useSelector((state: RootState) => state.merchants);
-
-  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const {
+    items: cartItems,
+    currentMerchantId,
+    currentMerchantName,
+  } = useSelector((state: RootState) => state.cart);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,8 +58,6 @@ const MarketPage = () => {
       return;
     }
 
-    // Fix: Dispatch both actions to get merchant info and products
-    // dispatch(getMerchantInformation(marketId));
     dispatch(getMerchantProducts(marketId));
   }, [dispatch, marketId]);
 
@@ -65,26 +67,48 @@ const MarketPage = () => {
   };
 
   const handleAddToCart = (item: any) => {
-    dispatch(
-      addToCart({
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        image: item.photo, // Fix: Use 'photo' instead of 'image'
-        category: activeCategory,
-      }),
-    );
+    const itemWithMerchant = {
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      image: item.photo,
+      category: activeCategory,
+      merchantId: marketId!,
+      merchantName: merchantInformation.businessName,
+    };
+
+    // Check if cart has items from different merchant
+    if (currentMerchantId && currentMerchantId !== marketId) {
+      setPendingItem(itemWithMerchant);
+      setShowAlert(true);
+      return;
+    }
+
+    // Safe to add to cart
+    dispatch(addToCart(itemWithMerchant));
   };
 
   const handleRemoveFromCart = (itemId: string) => {
     dispatch(removeFromCart(itemId));
   };
 
+  const handleConfirmClearCart = () => {
+    if (pendingItem) {
+      dispatch(clearAndAddToCart(pendingItem));
+      setPendingItem(null);
+    }
+    setShowAlert(false);
+  };
+
+  const handleCancelAlert = () => {
+    setPendingItem(null);
+    setShowAlert(false);
+  };
+
   if (loading) {
     return <LoadingSpinner />;
   }
 
-  // Fix: Add error handling
   if (error) {
     return (
       <div style={{ padding: '2rem', textAlign: 'center' }}>
@@ -92,7 +116,6 @@ const MarketPage = () => {
         <button
           onClick={() => {
             if (marketId) {
-              // dispatch(getMerchantInformation(marketId));
               dispatch(getMerchantProducts(marketId));
             }
           }}
@@ -103,7 +126,6 @@ const MarketPage = () => {
     );
   }
 
-  // Fix: Add null check for merchantInformation
   if (!merchantInformation) {
     return (
       <div style={{ padding: '2rem', textAlign: 'center' }}>
@@ -220,8 +242,118 @@ const MarketPage = () => {
         </div>
       </div>
 
+      {/* Alert Modal */}
+      {showAlert && (
+        <>
+          <div className='alert-overlay' onClick={handleCancelAlert}></div>
+          <div className='alert-modal'>
+            <div className='alert-header'>
+              <h3>Savatni tozalash</h3>
+            </div>
+            <div className='alert-body'>
+              <p>
+                Sizning savatingizda <strong>{currentMerchantName}</strong> restoranidan mahsulotlar
+                bor.
+              </p>
+              <p>
+                <strong>{merchantInformation.businessName}</strong> restoranidan mahsulot qo'shish
+                uchun avval savatni tozalash kerak.
+              </p>
+            </div>
+            <div className='alert-actions'>
+              <button className='alert-cancel' onClick={handleCancelAlert}>
+                Bekor qilish
+              </button>
+              <button className='alert-confirm' onClick={handleConfirmClearCart}>
+                Savatni tozalab qo'shish
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
       {/* Bottom spacing for mobile */}
       <div className='bottom-spacing'></div>
+
+      <style jsx>{`
+        .alert-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+        }
+
+        .alert-modal {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: white;
+          border-radius: 12px;
+          padding: 24px;
+          max-width: 90%;
+          width: 400px;
+          z-index: 1001;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .alert-header h3 {
+          margin: 0;
+          font-size: 18px;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 16px;
+        }
+
+        .alert-body p {
+          margin: 0 0 12px 0;
+          font-size: 14px;
+          line-height: 1.5;
+          color: #666;
+        }
+
+        .alert-body p:last-child {
+          margin-bottom: 24px;
+        }
+
+        .alert-actions {
+          display: flex;
+          gap: 12px;
+        }
+
+        .alert-cancel,
+        .alert-confirm {
+          flex: 1;
+          padding: 12px 16px;
+          border: none;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .alert-cancel {
+          background: #f5f5f5;
+          color: #666;
+        }
+
+        .alert-cancel:hover {
+          background: #e0e0e0;
+        }
+
+        .alert-confirm {
+          background: #ff6b35;
+          color: white;
+        }
+
+        .alert-confirm:hover {
+          background: #e55a2b;
+        }
+      `}</style>
     </div>
   );
 };

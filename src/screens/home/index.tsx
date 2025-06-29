@@ -71,7 +71,7 @@ export default function Home() {
               shape='circle'
               icon={<ShoppingCartOutlined style={{ fontSize: '24px' }} />}
               size='large'
-              onClick={() => navigate('/basket')}
+              onClick={() => navigate('/cart')}
             />
           </div>
         </div>

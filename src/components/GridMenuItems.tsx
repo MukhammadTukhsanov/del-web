@@ -1,6 +1,5 @@
 import { Col, Row } from 'antd';
 import GridMenuItem from './GridMenuItem';
-// import BasketItem from './basket-item';
 
 export default function GridMenuItems() {
   return (

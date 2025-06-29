@@ -1,7 +1,7 @@
-import { JSX, useEffect, useMemo } from 'react';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import { JSX, useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
-import 'mapbox-gl/dist/mapbox-gl.css';
 
 import ConfirmOTP from './auth/confirm-otp';
 import Login from './auth/login';
@@ -13,7 +13,7 @@ import { getCurrentUser, refreshToken } from './features/auth/userSlice';
 import { useAppDispatch, useAppSelector } from './hooks';
 
 import LocationSelectorMap from './components/LocationSelectorMap/LocationSelectorMap';
-import Basket from './screens/basket';
+import Cart from './screens/cart';
 import Home from './screens/home';
 import MarketPage from './screens/market-page';
 import Orders from './screens/orders';
@@ -33,7 +33,7 @@ function ProtectedRoute({ children }: { children: JSX.Element }) {
 
   const isAuthenticated = Boolean(userToken || otpToken);
 
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
+  return isAuthenticated ? children : <Navigate to='/login' replace />;
 }
 
 function AppRoutes() {
@@ -59,11 +59,11 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/confirmOTP" element={<ConfirmOTP />} />
+      <Route path='/login' element={<Login />} />
+      <Route path='/confirmOTP' element={<ConfirmOTP />} />
 
       <Route
-        path="/"
+        path='/'
         element={
           <ProtectedRoute>
             <Layout />
@@ -71,14 +71,14 @@ function AppRoutes() {
         }
       >
         <Route index element={<Home />} />
-        <Route path="basket" element={<Basket />} />
-        <Route path="orders" element={<Orders />} />
-        <Route path="profile" element={<Profile />} />
-        <Route path="market/:mid" element={<MarketPage />} />
-        <Route path="location" element={<LocationSelectorMap />} />
+        <Route path='cart' element={<Cart />} />
+        <Route path='orders' element={<Orders />} />
+        <Route path='profile' element={<Profile />} />
+        <Route path='market/:mid' element={<MarketPage />} />
+        <Route path='location' element={<LocationSelectorMap />} />
       </Route>
 
-      <Route path="*" element={<Navigate to={token ? '/' : '/login'} replace />} />
+      <Route path='*' element={<Navigate to={token ? '/' : '/login'} replace />} />
     </Routes>
   );
 }

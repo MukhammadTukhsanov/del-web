@@ -6,7 +6,7 @@ import { Image } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import BasketItem from './basket-item';
+import CartItem from './cart-item';
 import './style.css';
 
 interface TopNavBarProps {
@@ -14,7 +14,7 @@ interface TopNavBarProps {
   onTrashClick?: () => void;
 }
 
-export default function Basket({ title = 'Savat', onTrashClick }: TopNavBarProps) {
+export default function Cart({ title = 'Savat', onTrashClick }: TopNavBarProps) {
   const [showFixedNavbar, setShowFixedNavbar] = useState(false);
 
   const [comment, setComment] = useState('');
@@ -65,7 +65,7 @@ export default function Basket({ title = 'Savat', onTrashClick }: TopNavBarProps
   };
 
   return (
-    <div className='basket-page'>
+    <div className='cart-page'>
       {/* Static navbar */}
       <div className='top-navbar'>
         <button className='nav-icon' onClick={() => navigate(-1)} aria-label='Back'>
@@ -99,9 +99,9 @@ export default function Basket({ title = 'Savat', onTrashClick }: TopNavBarProps
         </div>
       </div>
 
-      <div className='basket-items'>
+      <div className='cart-items'>
         {cartItems.map((_, i) => (
-          <BasketItem
+          <CartItem
             category={_.category}
             count={_.count}
             id={_.id}
@@ -154,7 +154,7 @@ export default function Basket({ title = 'Savat', onTrashClick }: TopNavBarProps
                 <span className={`delivery-price ${isDeliveryFree ? 'free' : ''}`}>
                   {isDeliveryFree
                     ? 'Bepul'
-                    : `${formatPrice(basketData.deliveryPrice)} ${basketData.currency}`}
+                    : `${formatPrice(cartData.deliveryPrice)} ${cartData.currency}`}
                 </span>
               </div>
               {!isDeliveryFree && (
@@ -172,7 +172,7 @@ export default function Basket({ title = 'Savat', onTrashClick }: TopNavBarProps
                 </div>
                 <div className='checkout-right'>
                   <span className='total-price'>
-                    {/* {formatPrice(totalPrice)} {basketData.currency} */}
+                    {/* {formatPrice(totalPrice)} {cartData.currency} */}
                   </span>
                   <div className='checkout-arrow'>
                     <ArrowLeftOutlined style={{ fontSize: 16, transform: 'rotate(180deg)' }} />

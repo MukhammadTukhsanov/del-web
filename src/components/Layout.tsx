@@ -6,7 +6,7 @@ export default function Layout() {
   const location = useLocation();
 
   const hideBottomNavRoutes = [
-    '/basket',
+    '/cart',
     '/login',
     '/register',
     '/sendOTP',

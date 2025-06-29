@@ -1,4 +1,4 @@
-.basket-page {
+.cart-page {
   background-color: #f7f7f7;
   padding: 0 16px;
   min-height: 100vh;
@@ -105,8 +105,8 @@
   }
 }
 
-/* Basket items container */
-.basket-items {
+/* cart items container */
+.cart-items {
   padding-bottom: 16px;
 }
 
@@ -581,7 +581,7 @@
 
 /* Responsive adjustments */
 @media (max-width: 640px) {
-  .basket-page {
+  .cart-page {
     padding-bottom: 130px;
   }
 
@@ -641,7 +641,7 @@
 
 /* Enhanced Dark Mode Support */
 @media (prefers-color-scheme: dark) {
-  .basket-page {
+  .cart-page {
     background-color: #0f172a;
   }
 

@@ -11,9 +11,9 @@ export default function BottomNav() {
         <i className='bi bi-house-fill nav-link-icon'></i>
         Bosh saxifa
       </NavLink>
-      <NavLink to='/basket' end className='nav-link'>
-        <div className='basket-icon-container'>
-          <i className='bi bi-basket nav-link-icon'></i>
+      <NavLink to='/cart' end className='nav-link'>
+        <div className='cart-icon-container'>
+          <i className='bi bi-cart nav-link-icon'></i>
           {totalItems > 0 && (
             <span className='cart-badge'>{totalItems > 99 ? '99+' : totalItems}</span>
           )}
