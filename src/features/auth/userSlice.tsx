@@ -70,6 +70,7 @@ const userSlice = createSlice({
         state.token = null;
         state.user = null;
         state.error = 'Refresh token failed';
+        state.initialized = true;
       })
       .addCase(getCurrentUser.pending, (state) => {
         state.loading = true;
