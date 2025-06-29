@@ -14,10 +14,7 @@ export const getAddressFromLatLng = createAsyncThunk(
     return new Promise<string>((resolve, reject) => {
       geocoder.geocode({ location: latLng }, (results: { formatted_address: string }[], status: string) => {
         if (status === "OK") {
-          console.log('Geocoder results:', results);
-          if (results[1]) {
-            resolve(results[1].formatted_address);
-          } else if (results[0]) {
+          if (results[0]) {
             resolve(results[0].formatted_address);
           } else {
             reject(new Error("No results found"));
